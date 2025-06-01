@@ -36,6 +36,14 @@ spark-submit \
   /opt/spark/jobs/scala/target/scala-2.12/sparkrdd_2.12-0.1.jar
 ```
 
+```
+PYSPARK_DRIVER_PYTHON=python3 spark-submit \
+  --master spark://spark-master:7077 \
+  --conf spark.input.path=/opt/spark/data/logs.txt \
+  --conf spark.log.type=INFO \
+  --conf spark.interface.name=VTLINK \
+  /opt/spark/jobs/pyspark/src/read_txt_log.py
+```
 # Next plan 
 - Full ETL pipeline in Scala 
 - integration with Apache Airflow 
