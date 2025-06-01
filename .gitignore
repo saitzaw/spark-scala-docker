@@ -1,5 +1,16 @@
+.metals
+.vscode
 *.class
 *.log
 hs_err_pid*
 target/*
 project/*
+docker/.env 
+.env.*
+**/__pycache__
+**/.DS_Store
+**/data/output
+**/warehouse/*
+!**/warehouse/jupyter_installation_test.ipynb
+**/spark-logs
+**/target/
