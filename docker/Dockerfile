@@ -80,6 +80,7 @@ RUN chmod u+x /opt/spark/entrypoint.sh
 FROM pyspark-runner AS pyspark-jupyter
 
 RUN pip3 install notebook
+#RUN pip3 install great_expectations
 
 ENV JUPYTER_PORT=8889
 
