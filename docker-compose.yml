@@ -51,6 +51,8 @@ services:
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
       - ./spark-logs:/opt/spark/spark-events
+    ports:
+      - '8081:8081'
 
 volumes:
   spark-logs:
