@@ -6,11 +6,11 @@ RUN apt-get update && \
       curl \
       vim \
       unzip \
-      rsync \
       openjdk-11-jdk \
       build-essential \
-      software-properties-common \
-      ssh && \
+      rsync \
+      ssh \
+      software-properties-common && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -38,10 +38,26 @@ WORKDIR ${SPARK_HOME}
 # Download spark
 # see resources: https://dlcdn.apache.org/spark/spark-3.5.5/
 # filename: spark-3.5.5-bin-hadoop3.tgz 
-RUN mkdir -p ${SPARK_HOME} \
-    && curl https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz -o spark-${SPARK_VERSION}-bin-hadoop3.tgz \
-    && tar xvzf spark-${SPARK_VERSION}-bin-hadoop3.tgz --directory ${SPARK_HOME} --strip-components 1 \
+RUN curl -fSL https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz -o spark-${SPARK_VERSION}-bin-hadoop3.tgz \
+    && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop3.tgz --directory ${SPARK_HOME} --strip-components 1 \
     && rm -rf spark-${SPARK_VERSION}-bin-hadoop3.tgz
+
+### SBT build tool
+# Install sbt
+# Install sbt from official Scala SBT repo
+# Install sbt from official repo (adapted for Docker, no sudo)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends apt-transport-https curl gnupg && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" > /etc/apt/sources.list.d/sbt.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" > /etc/apt/sources.list.d/sbt_old.list && \
+    curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | \
+      gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/scalasbt-release.gpg --import && \
+    chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg && \
+    apt-get update && \
+    apt-get install -y sbt && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 # Add spark binaries to shell and enable execution
 RUN chmod u+x /opt/spark/sbin/* && \
@@ -49,13 +65,13 @@ RUN chmod u+x /opt/spark/sbin/* && \
 ENV PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 
 # Add a spark config for all nodes
-COPY conf/spark-defaults.conf "$SPARK_HOME/conf/"
+COPY confs/spark-defaults.conf "$SPARK_HOME/conf/"
 
 
 FROM spark-base AS pyspark
 
 # Install python deps
-COPY requirements.txt .
+COPY docker/requirements.txt .
 RUN pip3 install -r requirements.txt
 
 
@@ -72,7 +88,7 @@ RUN curl https://repo1.maven.org/maven2/io/delta/delta-storage/3.2.0/delta-stora
 # Download hudi jars
 RUN curl https://repo1.maven.org/maven2/org/apache/hudi/hudi-spark3-bundle_2.12/0.15.0/hudi-spark3-bundle_2.12-0.15.0.jar -Lo /opt/spark/jars/hudi-spark3-bundle_2.12-0.15.0.jar
 
-COPY entrypoint.sh .
+COPY docker/entrypoint.sh .
 RUN chmod u+x /opt/spark/entrypoint.sh
 
 
