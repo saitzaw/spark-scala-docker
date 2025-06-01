@@ -1,7 +1,9 @@
 services:
   spark-master:
     container_name: spark-master
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     image: spark-image
     entrypoint: ['./entrypoint.sh', 'master']
     healthcheck:
@@ -10,6 +12,7 @@ services:
       timeout: 3s
       retries: 3
     volumes:
+      - ../confs:/opt/spark/conf
       - ../spark-apps:/opt/spark/jobs
       - ../data:/opt/spark/data
       - spark-logs:/opt/spark/spark-events
@@ -28,6 +31,7 @@ services:
     env_file:
       - .env.spark
     volumes:
+      - ../confs:/opt/spark/conf
       - ../spark-apps:/opt/spark/jobs
       - ../data:/opt/spark/data
       - spark-logs:/opt/spark/spark-events
@@ -43,6 +47,7 @@ services:
     env_file:
       - .env.spark
     volumes:
+      - ../confs:/opt/spark/conf
       - ../spark-apps:/opt/spark/jobs
       - ../data:/opt/spark/data
       - spark-logs:/opt/spark/spark-events
