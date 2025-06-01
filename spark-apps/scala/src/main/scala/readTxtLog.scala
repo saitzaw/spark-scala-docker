@@ -5,7 +5,7 @@ import java.time.Instant
 
 object readTxtLog {
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("").setMaster("local[*]")
+    val conf = new SparkConf().setAppName("rddReadTxt").setMaster("local[*]")
 
     // RDD input path and log type can be set via command line arguments or default values
     val inputPath = conf.get("spark.input.path", "src/main/resources/logs.txt")
