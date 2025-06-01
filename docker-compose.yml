@@ -34,7 +34,7 @@ services:
       - ./confs:/opt/spark/conf
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
-      - spark-logs:/opt/spark/spark-events
+      - ./spark-logs:/opt/spark/spark-events
     ports:
       - '18080:18080'
 
@@ -50,7 +50,7 @@ services:
       - ./confs:/opt/spark/conf
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
-      - spark-logs:/opt/spark/spark-events
+      - ./spark-logs:/opt/spark/spark-events
 
 volumes:
   spark-logs:
