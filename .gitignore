@@ -1,5 +1,6 @@
 .metals
 .vscode
+**.bsp
 *.class
 *.log
 hs_err_pid*
