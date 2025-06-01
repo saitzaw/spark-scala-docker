@@ -7,6 +7,11 @@
 # Run the docker compose 
     - make up 
     Note: wait 2 to 3 mins to settle 
+
+
+# Check the spark master UI 
+![Spark Architecture](asserts/spark-master.png)
+
 # Stop the docker compose 
     - make down 
 
@@ -25,7 +30,11 @@ sbt package
 ```
 
 # spark submit 
-    This process needs to do in the master node 
+    This process needs to do in the master node and run this command 
+```
+/opt/spark/bin
+```
+Then run the spark-submit to get the result
 ```
 spark-submit \
   --class readTxtLog \
@@ -44,6 +53,9 @@ PYSPARK_DRIVER_PYTHON=python3 spark-submit \
   --conf spark.interface.name=VTLINK \
   /opt/spark/jobs/pyspark/src/read_txt_log.py
 ```
+# check the process in UI
+![Spark Architecture](asserts/spark-application.png)
+
 # Next plan 
 - Full ETL pipeline in Scala 
 - integration with Apache Airflow 
