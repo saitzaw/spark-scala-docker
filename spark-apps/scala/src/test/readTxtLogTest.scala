@@ -8,7 +8,7 @@ class ScalaRDDTest extends AnyFunSuite {
   var sc: SparkContext = _
 
   def createContext(): SparkContext = {
-    val conf = new SparkConf().setAppName("ScalaRDDTest").setMaster("local[*]")
+    val conf = new SparkConf().setAppName("rddReadTxtTest").setMaster("local[*]")
     new SparkContext(conf)
   }
 
