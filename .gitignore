@@ -1,3 +1,4 @@
+.env
 .metals
 .vscode
 **.bsp
@@ -15,3 +16,5 @@ docker/.env
 !**/warehouse/jupyter_installation_test.ipynb
 **/spark-logs
 **/target/
+**/.ipynb_checkpoints
+
