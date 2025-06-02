@@ -17,4 +17,4 @@ docker/.env
 **/spark-logs
 **/target/
 **/.ipynb_checkpoints
-
+pg_data/
