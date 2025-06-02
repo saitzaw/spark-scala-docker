@@ -9,3 +9,9 @@ down:
 
 dev:
 	docker exec -it spark-master bash
+
+da:
+	docker exec -it spark-jupypter bash 
+
+pg:
+	docker exec -it postgres bash
