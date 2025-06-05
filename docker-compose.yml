@@ -56,14 +56,18 @@ services:
 
   jupyter:
     container_name: spark-jupyter
-    image: jupyter/pyspark-notebook:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.jupyter
     ports:
       - "8888:8888"
     depends_on:
       - spark-master
       - postgres
     volumes:
-      - ./notebooks:/home/jovyan/work
+      - ./notebooks:/opt/workspace
+      - ./.env:/opt/workspace/.env
+      - ./spark-logs:/opt/spark-events
     environment:
       - PYSPARK_PYTHON=python3
       - PYSPARK_DRIVER_PYTHON=jupyter
@@ -80,7 +84,6 @@ services:
     volumes:
       - ./pg_data:/var/lib/postgresql/data
       - ./init-sql:/sql_scripts
-      # - init-sql:/docker-entrypoint-initdb.d
 
 volumes:
   pg_data:
