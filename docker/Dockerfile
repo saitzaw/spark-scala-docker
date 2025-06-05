@@ -91,21 +91,5 @@ RUN curl https://repo1.maven.org/maven2/org/apache/hudi/hudi-spark3-bundle_2.12/
 COPY docker/entrypoint.sh .
 RUN chmod u+x /opt/spark/entrypoint.sh
 
-
-# Optionally install Jupyter
-FROM pyspark-runner AS pyspark-jupyter
-
-RUN pip3 install notebook
-#RUN pip3 install great_expectations
-
-ENV JUPYTER_PORT=8889
-
-ENV PYSPARK_DRIVER_PYTHON=jupyter
-ENV PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --allow-root --ip=0.0.0.0 --port=${JUPYTER_PORT}"
-# --ip=0.0.0.0 - listen all interfaces
-# --port=${JUPYTER_PORT} - listen ip on port 8889
-# --allow-root - to run Jupyter in this container by root user. It is adviced to change the user to non-root.
-
-
 ENTRYPOINT ["./entrypoint.sh"]
 CMD [ "bash" ]
