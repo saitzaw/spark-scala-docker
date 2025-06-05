@@ -11,7 +11,7 @@ dev:
 	docker exec -it spark-master bash
 
 da:
-	docker exec -it spark-jupypter bash 
+	docker exec -it spark-jupyter bash 
 
 pg:
 	docker exec -it postgres bash
