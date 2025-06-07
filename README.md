@@ -21,7 +21,23 @@
 - Jupyter notebook / Lab for analysis
 
 # Database 
-- Postgresql 
+- Postgresql 15
+
+# Additional requirements
+- Vscode with Metal extension 
+- DBeaver 
+- Docker for Desktop 
+- Git 
+
+# Version alignment 
+
+| # | language | version | 
+|:-:|:-------:|:------------| 
+| 1 | python  | 3.12.9 | 
+| 2 | Java | open-jdk-11 | 
+| 3 | Scala | 2.12.18 | 
+
+Note: All the spark server and worker use spark-3.5.5 version 
 
 # Using make command 
 
@@ -50,6 +66,25 @@ user name, password etc
 | 3 | sample.env.airflow | .env.airflow |airflow environment file |  
 
 REMARK: edit and make sure the parameters before image  build and docker compose up 
+
+# Folders Description 
+| # |  Folder |description | 
+|:-:|:-------:|:-----------:|
+| 1 | asserts | pictures folder | 
+| 2 | confs | spark configuration file | 
+| 3 | dags | apache airflow dags file folder | 
+| 4 | data | data folder for spark and pyspark script | 
+| 5 | docker | docker files location | 
+| 6 | init-sql | sql related folders | 
+| 7 | logs* | auto generate from apache airflow| 
+| 8 | notebooks | location for data analysis and data scientist | 
+| 9 | pg_data* | auto generate and volumn mount for postgresql | 
+| 10| plugins | Apache Airflow plugins file here | 
+| 11| reports | report generators | 
+| 12| result-jar| jar files collection and use in spark-submit | 
+| 13| spark-apps| scala and python development folder | 
+| 14| spark-logs| external log folder for spark| 
+
 
 # BUILD and Setup 
 Run those command in GNU Linux or WSL terminal  
@@ -122,7 +157,7 @@ ip route | grep default
 ```
 The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel 
 
-# PG connection and check for single view
+# Postgresal connection to DBeaver and check for single view
 - Add the requried data to connection and use the default IP addess get from the ip route, in this case the jdbc connecting is using 172.23.224.1 this ip address
 
 ![Single View](asserts/postsqlDBeaver.png)
