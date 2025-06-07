@@ -39,8 +39,20 @@
 |10 | make scheduler | enter aiflow scheduler | 
 |11 | make redis | enter redis queue | 
 
+# Environment file 
+Remove sample from the file and edit the reqiured file such as 
+user name, password etc 
+
+| # | environment file | use file name |description | 
+|:-:|:----------------:|:-------------:|:-----------:|
+| 1 | sample.env | .env |  environment file for jupyter notebook and postgresql | 
+| 2 | sample.env.spark | .env.spark | spark environment file | 
+| 3 | sample.env.airflow | .env.airflow |airflow environment file |  
+
+REMARK: edit and make sure the parameters before image  build and docker compose up 
+
 # BUILD and Setup 
-First step do the following steps in GNU Linux terminal or WSL terminal  
+Run those command in GNU Linux or WSL terminal  
 ```shell 
 make build 
 make up 
@@ -163,16 +175,19 @@ we can check the spark process in UI and it is also a dag.
 
 
 # Business values 
-- OLD CRM system is monolithic and some are running in Mirco service
+- Same report for OLD CRM system is monolithic and some are running in Mirco service 
 - Real time data analysis support
-- DataVault 2.0 and SCD type 2 for address and historical tracking 
+- Data As A Product 
 - Compliant checking using AI
 - report generation in pdf and in excel 
+- ON DEMANd ad-hoc report supprot 
+- Master data management 
 
 # Next plan 
 - Full ETL pipeline in Scala 
+- DataVault 2.0 and SCD type 2 for address and historical tracking 
 - CI/CD 
 - Data profiler 
-- DBT 
-- Apache Iceberg and Delta lake
+- Integration with DBT 
+- Integration with Apache Iceberg and Delta lake 
 - integration with Aapche Kafka
