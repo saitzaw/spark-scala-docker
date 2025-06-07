@@ -53,6 +53,18 @@ PYSPARK_DRIVER_PYTHON=python3 spark-submit \
   --conf spark.interface.name=VTLINK \
   /opt/spark/jobs/pyspark/src/read_txt_log.py
 ```
+
+```postgres reader 
+spark-submit \
+  --class PostgresReader \
+  --master local[*] \
+  --jars /opt/spark/jobs/scala/lib/postgresql-42.7.1.jar \
+  --conf spark.db.user=user \
+  --conf spark.db.pass=password \
+  --conf spark.db.url=jdbc:postgresql://postgres:5432/sparkdb \
+  --conf spark.db.table=table \
+  /opt/spark/jobs/scala/target/scala-2.12/pg-spark_2.12-0.1.jar
+```
 # check the process in UI
 ![Spark Architecture](asserts/spark-application.png)
 
