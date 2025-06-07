@@ -18,3 +18,4 @@ docker/.env
 **/target/
 **/.ipynb_checkpoints
 pg_data/
+logs/
