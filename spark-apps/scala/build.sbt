@@ -1,4 +1,4 @@
-name := "PG-Spark"
+name := "oldSingleViewCRM"
 
 version := "0.1"
 
