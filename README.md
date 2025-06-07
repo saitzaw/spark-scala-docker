@@ -1,64 +1,85 @@
-# data engineering in Scala 
-    Data engineering needs complex infrastrucre setup and install huge dependencies. However, thanks to containerization, we can build the DEV, QUA and PRD environment.  
+# Learn data engineering in Scala, PySpark 
+    Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
+    All the scripts and code are easy to test and run in local before submit to cloud server.  
 
-# Build the project 
-    - make build 
+# SYSTEM Requirement 
+- GNU Linux or WSL 
+- Docker must be installed 
+- docke compose must be installed 
+- RAM 16 GB at least 
+- CPU core i5 at least 
 
-# Run the docker compose 
-    - make up 
-    Note: wait 2 to 3 mins to settle 
+# Languages 
+- Python, PySpark 
+- Scala 
+- SQL 
 
+# Framework 
+- Apache Spark 
+- Apache Airflow 
+- Jupyter notebook / Lab for analysis
 
-# Check the spark master UI 
+# Database 
+- Postgresql 
+
+# Using make command 
+
+| # | command | description | 
+|:-:|:-------:|:------------| 
+| 1 | make build | build docker images for customized spark and jupyter | 
+| 2 | make up | up all docker images and need to wait 2 to 3 mins| 
+| 3 | make down | docker compose down | 
+| 4 | make rebuild | rebuild the docker image | 
+| 5 | make clean | clean all docker image | 
+| 6 | make dev | enter the spark master | 
+| 7 | make da | enter the jupyter image | 
+| 8 | make pg | enter the postgresql | 
+| 9 | make web | enter airflow webserver | 
+|10 | make scheduler | enter aiflow scheduler | 
+|11 | make redis | enter redis queue | 
+
+# BUILD and Setup 
+First step do the following steps in GNU Linux terminal or WSL terminal  
+```shell 
+make build 
+make up 
+```
+
+## Check the spark master UI 
+After building the docker images and up the process, check the spark UI
+
 ![Spark Architecture](asserts/spark-master.png)
 
-# Stop the docker compose 
-    - make down 
+# Apache airflow integration 
+login to the postgresql 
+and use the psql command with sparkuser to create datbases and airflow 
 
-# Enter the spark server 
-    - make dev
+```sql
+-- Create a new database for Airflow
+CREATE DATABASE airflowdb;
 
-# Build the jar file 
-```
-cd /opt/spark/jobs/scala
-sbt package 
-```
+-- Create a new user with a secure password
+CREATE USER airflow WITH PASSWORD 'airflowpass';
 
-# output jar location 
-```
-/opt/spark/jobs/scala/target/scala-2.12
-```
+-- Grant privileges to the new user
+GRANT ALL PRIVILEGES ON DATABASE airflowdb TO airflow;
 
-# spark submit 
-    This process needs to do in the master node and run this command 
-```
-/opt/spark/bin
-```
-Then run the spark-submit to get the result
-```
-spark-submit \
-  --class readTxtLog \
-  --master spark://spark-master:7077 \
-  --conf spark.input.path=/opt/spark/data/logs.txt \
-  --conf spark.log.type=INFO \
-  --conf spark.interface.name=VTLINK \
-  /opt/spark/jobs/scala/target/scala-2.12/sparkrdd_2.12-0.1.jar
-```
-### Pyspark submit
+-- change to airflowdb 
+\c airflowdb
 
-```
-PYSPARK_DRIVER_PYTHON=python3 spark-submit \
-  --master spark://spark-master:7077 \
-  --conf spark.input.path=/opt/spark/data/logs.txt \
-  --conf spark.log.type=INFO \
-  --conf spark.interface.name=VTLINK \
-  /opt/spark/jobs/pyspark/src/read_txt_log.py
+-- Grant privileges to public schema to airflow 
+GRANT ALL ON SCHEMA public TO airflow;
 ```
 
+## INITIAL STATE & FIRST TIME for Airflow 
+```Shell 
+make airflow-init-db 
+make airflow-migrate 
+make airflow-create-user
+``` 
 
-
-# check the process in UI
-![Spark Architecture](asserts/spark-application.png)
+## Check Airflow UI 
+![Airflow UI](asserts/airflowUI.png)
 
 # Load data to postgresl 
 ## Enter the postgresql docker image 
@@ -70,7 +91,9 @@ make pg
 psql -U sparkuser -d sparkdb
 ```
 
-### Sample to add simple sql 
+### create schema and add data to table 
+![ERD diagram](asserts/ERD.png)
+
 ```
 \i /path/to/07_dml_seed_crm_orders.sql
 ```
@@ -91,15 +114,61 @@ The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel
 
 ![Single View](asserts/postsqlDBeaver.png)
 
+# Spark submit 
+##  Build the jar file 
+using make dev and do the following steps 
+```
+cd /opt/spark/jobs/scala
+sbt package 
+```
+if the required jar files are not created. 
+
+# output jar location 
+The path contains the output of sbt compiler 
+```
+/opt/spark/jobs/scala/target/scala-2.12
+```
+
+# Jar file submit 
+    This process needs to do in the master node and run this command 
+```
+/opt/spark/bin
+```
+Then run the spark-submit to get the result
+```
+spark-submit \
+  --class readTxtLog \
+  --master spark://spark-master:7077 \
+  --conf spark.input.path=/opt/spark/data/logs.txt \
+  --conf spark.log.type=INFO \
+  --conf spark.interface.name=VTLINK \
+  /opt/spark/jobs/scala/target/scala-2.12/sparkrdd_2.12-0.1.jar
+```
+### Pyspark submit
+For test with PySpark 
+```
+PYSPARK_DRIVER_PYTHON=python3 spark-submit \
+  --master spark://spark-master:7077 \
+  --conf spark.input.path=/opt/spark/data/logs.txt \
+  --conf spark.log.type=INFO \
+  --conf spark.interface.name=VTLINK \
+  /opt/spark/jobs/pyspark/src/read_txt_log.py
+```
+
+# check the process in UI
+![Spark Architecture](asserts/spark-application.png)
 
 # Business values 
-- OLD CRM system is monolithic and need to modernize 
-- Migration to more compact and useful data strcture 
-- 
+- OLD CRM system is monolithic and some are running in Mirco service
+- Real time data analysis support
+- DataVault 2.0 and SCD type 2 for address and historical tracking 
+- Compliant checking using AI
+- report generation in pdf and in excel 
 
 # Next plan 
 - Full ETL pipeline in Scala 
-- integration with Apache Airflow 
 - CI/CD 
 - Data profiler 
+- DBT 
+- Apache Iceberg and Delta lake
 - integration with Aapche Kafka
