@@ -1,6 +1,7 @@
 # Learn data engineering in Scala, PySpark 
-    Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
-    All the scripts and code are easy to test and run in local before submit to cloud server.  
+
+  Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
+  All the scripts and code are easy to test and run in local before submit to cloud server.  
 
 # SYSTEM Requirement 
 - GNU Linux or WSL 
@@ -115,7 +116,7 @@ The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel
 ![Single View](asserts/postsqlDBeaver.png)
 
 # Spark submit 
-##  Build the jar file 
+###  Build the jar file 
 using make dev and do the following steps 
 ```
 cd /opt/spark/jobs/scala
@@ -123,13 +124,13 @@ sbt package
 ```
 if the required jar files are not created. 
 
-# output jar location 
+### output jar location 
 The path contains the output of sbt compiler 
 ```
 /opt/spark/jobs/scala/target/scala-2.12
 ```
 
-# Jar file submit 
+### Jar file submit 
     This process needs to do in the master node and run this command 
 ```
 /opt/spark/bin
@@ -156,7 +157,10 @@ PYSPARK_DRIVER_PYTHON=python3 spark-submit \
 ```
 
 # check the process in UI
+we can check the spark process in UI and it is also a dag.  
+
 ![Spark Architecture](asserts/spark-application.png)
+
 
 # Business values 
 - OLD CRM system is monolithic and some are running in Mirco service
