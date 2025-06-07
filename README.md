@@ -68,6 +68,26 @@ spark-submit \
 # check the process in UI
 ![Spark Architecture](asserts/spark-application.png)
 
+# Load data to postgresl 
+## Enter the postgresql docker image 
+```
+make pg 
+```
+## psql command to enter the postresql 
+```
+psql -U sparkuser -d sparkdb
+```
+
+### Sample to add simple sql 
+```
+\i /path/to/07_dml_seed_crm_orders.sql
+```
+### create and insert all seed values in pg using 
+Remark: init.sh is in the sql_scripts folder
+```
+./init.sh 
+```
+
 # Next plan 
 - Full ETL pipeline in Scala 
 - integration with Apache Airflow 
