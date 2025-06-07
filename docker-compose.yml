@@ -73,6 +73,60 @@ services:
       - PYSPARK_DRIVER_PYTHON=jupyter
       - PYSPARK_DRIVER_PYTHON_OPTS=notebook --no-browser --allow-root --ip=0.0.0.0 --port=8888
       - SPARK_MASTER=spark://spark-master:7077
+    
+  airflow-webserver:
+    image: apache/airflow:2.9.2
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env.airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    ports:
+      - "8088:8080"
+    command: webserver
+    restart: always
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.2
+    container_name: airflow-scheduler
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env.airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: scheduler
+    restart: always
+
+  airflow-worker:
+    image: apache/airflow:2.9.2
+    container_name: airflow-worker
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env.airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: celery worker
+    restart: always
+
+  redis:
+    image: redis:latest
+    container_name: airflow-redis
+    ports:
+      - "6379:6379"
+
   postgres:
     image: postgres:15
     container_name: postgres
