@@ -44,6 +44,7 @@ spark-submit \
   --conf spark.interface.name=VTLINK \
   /opt/spark/jobs/scala/target/scala-2.12/sparkrdd_2.12-0.1.jar
 ```
+### Pyspark submit
 
 ```
 PYSPARK_DRIVER_PYTHON=python3 spark-submit \
@@ -54,17 +55,8 @@ PYSPARK_DRIVER_PYTHON=python3 spark-submit \
   /opt/spark/jobs/pyspark/src/read_txt_log.py
 ```
 
-```postgres reader 
-spark-submit \
-  --class PostgresReader \
-  --master local[*] \
-  --jars /opt/spark/jobs/scala/lib/postgresql-42.7.1.jar \
-  --conf spark.db.user=user \
-  --conf spark.db.pass=password \
-  --conf spark.db.url=jdbc:postgresql://postgres:5432/sparkdb \
-  --conf spark.db.table=table \
-  /opt/spark/jobs/scala/target/scala-2.12/pg-spark_2.12-0.1.jar
-```
+
+
 # check the process in UI
 ![Spark Architecture](asserts/spark-application.png)
 
@@ -88,10 +80,26 @@ Remark: init.sh is in the sql_scripts folder
 ./init.sh 
 ```
 
+# Check the defautl route to interactive with DBeaver 
+```
+ip route | grep default 
+```
+The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel 
+
+# PG connection and check for single view
+- Add the requried data to connection and use the default IP addess get from the ip route, in this case the jdbc connecting is using 172.23.224.1 this ip address
+
+![Single View](asserts/postsqlDBeaver.png)
+
+
+# Business values 
+- OLD CRM system is monolithic and need to modernize 
+- Migration to more compact and useful data strcture 
+- 
+
 # Next plan 
 - Full ETL pipeline in Scala 
 - integration with Apache Airflow 
 - CI/CD 
 - Data profiler 
-- integration with Aapche Kafka 
-
+- integration with Aapche Kafka
