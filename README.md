@@ -3,8 +3,11 @@
   Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
   All the scripts and code are easy to test and run in local before submit to cloud server.  
 
+# Data Pipeline Architecture
+![System Architecture](asserts/dataArch.png)
+
 # SYSTEM Requirement 
-- GNU Linux or WSL 
+- GNU Linux or WSL 2
 - Docker must be installed 
 - docke compose must be installed 
 - RAM 16 GB at least 
@@ -85,22 +88,39 @@ REMARK: edit and make sure the parameters before image  build and docker compose
 | 13| spark-apps| scala and python development folder | 
 | 14| spark-logs| external log folder for spark| 
 
+REMARK: Don't run make rebuild or make clean. It will take more tike to build a docker image and repulling the required images. 
+
 
 # BUILD and Setup 
+## BUILD 
 Run those command in GNU Linux or WSL terminal  
 ```shell 
 make build 
 make up 
 ```
+it needs to wait couple of minutes to build and settle the images. 
 
-## Check the spark master UI 
-After building the docker images and up the process, check the spark UI
+## Setup 
+1. postgresl for data and  
+2. apache airflow
 
-![Spark Architecture](asserts/spark-master.png)
+### postgresql setup
+Enter the postgresql image by `make pg` to create airflow user name and password
 
-# Apache airflow integration 
-login to the postgresql 
-and use the psql command with sparkuser to create datbases and airflow 
+### psql command to enter the postresql 
+```
+psql -U sparkuser -d sparkdb
+```
+### load data to SQL
+```sql 
+\i /path/to/07_dml_seed_crm_orders.sql
+```
+### create and insert all seed values in pg using init.sh 
+Remark: init.sh is in the sql_scripts folder
+```
+./init.sh 
+```
+### Airflow setup
 
 ```sql
 -- Create a new database for Airflow
@@ -119,71 +139,152 @@ GRANT ALL PRIVILEGES ON DATABASE airflowdb TO airflow;
 GRANT ALL ON SCHEMA public TO airflow;
 ```
 
-## INITIAL STATE & FIRST TIME for Airflow 
+- Run this command to initialize apache airflow webserver `make airflow-init-db` and then run other left commands 
 ```Shell 
-make airflow-init-db 
 make airflow-migrate 
 make airflow-create-user
-``` 
+```
+Airflow is ready to use, but all the example dags are not shown as development environment. 
 
-## Check Airflow UI 
+# Login pages 
+This project supports to use UI
+1. Spark master UI 
+2. Spark work 
+3. Spark history 
+4. Jupyter notebook 
+5. airflow web UI 
+
+## Check the spark master UI in web
+After building the docker images and up the process, check the spark UI
+
+| # | url | Description | 
+| 1 | http://localhost:8080 | spark master | 
+| 2 | http://localhost:8081 | spark worker | 
+| 3 | http://localhost:18080| spark histoircal server | 
+| 4 | http://localhost:8088 | airflow web ui | 
+| 5 | http://localhost:4040 | spark application | 
+| 6 | http://localhost:8888 | Jupyter UI | 
+
+REMARK: Jupyter needs to use access token each time 
+TODO: username and password based login 
+
+e.g. of Spark UI 
+![Spark Architecture](asserts/spark-master.png)
+
+
+## Apache airflow integration 
+This project use the Apache airflow as a data orchestrator. It supports to run spark-submit and others jobs.  
+e.g. of airflow UI 
 ![Airflow UI](asserts/airflowUI.png)
 
-# Load data to postgresl 
-## Enter the postgresql docker image 
-```
-make pg 
-```
-## psql command to enter the postresql 
-```
-psql -U sparkuser -d sparkdb
-```
-
-### create schema and add data to table 
+## Sample ER diagarm
+This is the sample ER diagram of Old ORM system without having a proper columns name. 
 ![ERD diagram](asserts/ERD.png)
 
-```
-\i /path/to/07_dml_seed_crm_orders.sql
-```
-### create and insert all seed values in pg using 
-Remark: init.sh is in the sql_scripts folder
-```
-./init.sh 
-```
-
-# Check the defautl route to interactive with DBeaver 
-```
-ip route | grep default 
-```
-The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel 
-
-# Postgresal connection to DBeaver and check for single view
-- Add the requried data to connection and use the default IP addess get from the ip route, in this case the jdbc connecting is using 172.23.224.1 this ip address
-
+### create the sigle view in postgresql 
+This is the sample of single view in postgresql before deploy on the Scala code. 
+It can only check for Monolithic application. 
+SQL pipeline make sure the micro services into a single landing like a monolithic structure. 
 ![Single View](asserts/postsqlDBeaver.png)
 
-# Spark submit 
+# Scala and Python 
+This section is about how to build the scala based application and submit the jar to spark server. In this project, we can build our jar file on server instead of using host machine. But, in real production environment we should build on provided machine for safety. 
+
+### Software lifecycle 
+- DEV, create the jar file and run on this dockers 
+- QUA QA test, This is very difficult to check the Data As A Product 
+- UAT, This is also difficult to do in DAAP 
+- PRD, Use the Jar file and integrate with Airflow 
+
+### Data lifecycle 
+- DEV, get the sample dataset from production [Note: not use dummy data]
+- QUA, check the data quality, data drift, schema evolution, and report dashboard 
+- UAT, internal check and run with production data and check on the clone dashboard 
+- PRD, Use the pass Jar file or python script to run on server 
+
+
+### Installation in development environment 
+  - Install Java [open-jdk-11]
+  - Install cs 
+  - Install Scala using cs [scala 2.12.18]
+  - Install Python 3.12.9 
+  - install sbt 
+Check the sbt version 
+
+### Scala apps [spark-apps]
+  - Create a folder structure as follow in your local machine 
+  - create a spark folder in `/opt/spark/job/scala`
+
+#### create required folders 
+```shell 
+mkdir -p spark-apps/pyspark
+mkdir -p spark-apps/scala 
+mkdir -p spark-apps/scala/lib spark-apps/scala/src
+```
+#### create a build file 
+- add the required dependencies in build.sbt
+```shell 
+name := "oldSingleViewCRM"
+
+version := "0.1"
+
+scalaVersion := "2.12.18"
+
+// libraryDependencies += "org.apache.spark" %% "spark-core" % "3.5.0"
+
+libraryDependencies ++= Seq(
+ "org.apache.spark" %% "spark-core" % "3.5.5" % Provided,
+  "org.apache.spark" %% "spark-sql"  % "3.5.5" % Provided,
+  "org.scalatest"    %% "scalatest"  % "3.2.17" % Test ,
+  "org.postgresql" % "postgresql" % "42.7.1" % Runtime
+)
+```
+
+#### Folder structure 
+```Shell 
+  .
+├── pyspark
+│   ├── README.md
+│   ├── src
+│   │   └── read_txt_log.py
+│   └── test
+└── scala
+    ├── build.sbt
+    ├── lib
+    │   └── postgresql-42.7.1.jar    
+    └── src
+        ├── main
+        │   └── scala
+        │       ├── oldSingleViewCRM.scala
+        │       ├── readPg.scala
+        │       └── readTxtLog.scala
+        └── test
+            └── readTxtLogTest.scala
+```
+
 ###  Build the jar file 
 using make dev and do the following steps 
-```
+```shell 
 cd /opt/spark/jobs/scala
 sbt package 
 ```
-if the required jar files are not created. 
 
 ### output jar location 
 The path contains the output of sbt compiler 
 ```
 /opt/spark/jobs/scala/target/scala-2.12
 ```
+### copy jar file to spark server
+if the jar file build in host or local machine copy jar file and submit to spark  server. 
+Change the Jar file location in spark-submit, Following spark-submit is only for creating a jar file in the spark server. 
 
 ### Jar file submit 
     This process needs to do in the master node and run this command 
-```
+```shell 
 /opt/spark/bin
 ```
 Then run the spark-submit to get the result
-```
+```shell 
 spark-submit \
   --class readTxtLog \
   --master spark://spark-master:7077 \
@@ -193,8 +294,8 @@ spark-submit \
   /opt/spark/jobs/scala/target/scala-2.12/sparkrdd_2.12-0.1.jar
 ```
 ### Pyspark submit
-For test with PySpark 
-```
+To test with PySpark 
+```shell 
 PYSPARK_DRIVER_PYTHON=python3 spark-submit \
   --master spark://spark-master:7077 \
   --conf spark.input.path=/opt/spark/data/logs.txt \
@@ -202,6 +303,22 @@ PYSPARK_DRIVER_PYTHON=python3 spark-submit \
   --conf spark.interface.name=VTLINK \
   /opt/spark/jobs/pyspark/src/read_txt_log.py
 ```
+
+# Troubleshooting 
+### Check the defautl route to interactive with DBeaver 
+```shell 
+ip route | grep default 
+```
+The Sample output is -> default via 172.23.224.1 dev eth0 proto kernel 
+
+### Postgresal connection to DBeaver and check for single view
+Add the requried data to connection and use the default IP addess get from the ip route, in this case the jdbc connecting is using 172.23.224.1 this ip address
+
+### Spark submit fail 
+- Build Scala version and Spark server Scala version mismatch 
+- File path 
+- Postgresql user name and password 
+- postgresql jdbc connector location issue 
 
 # check the process in UI
 we can check the spark process in UI and it is also a dag.  
@@ -220,6 +337,7 @@ we can check the spark process in UI and it is also a dag.
 
 # Next plan 
 - Full ETL pipeline in Scala 
+- Jupyter notebook login 
 - DataVault 2.0 and SCD type 2 for address and historical tracking 
 - CI/CD 
 - Data profiler 
