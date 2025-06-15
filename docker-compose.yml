@@ -3,7 +3,7 @@ services:
     container_name: spark-master
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/spark.Dockerfile
     image: spark-image
     entrypoint: ['./entrypoint.sh', 'master']
     healthcheck:
@@ -58,7 +58,7 @@ services:
     container_name: spark-jupyter
     build:
       context: .
-      dockerfile: docker/Dockerfile.jupyter
+      dockerfile: docker/jupyter.Dockerfile
     ports:
       - "8888:8888"
     depends_on:
@@ -75,7 +75,10 @@ services:
       - SPARK_MASTER=spark://spark-master:7077
     
   airflow-webserver:
-    image: apache/airflow:2.9.2
+    build:
+      context: .
+      dockerfile: docker/airflow.Dockerfile
+    image: custom-airflow:2.9.2
     container_name: airflow-webserver
     depends_on:
       - postgres
@@ -83,16 +86,18 @@ services:
     env_file:
       - .env.airflow
     volumes:
+      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - ./spark-apps:/opt/spark/jobs 
     ports:
       - "8088:8080"
     command: webserver
     restart: always
 
   airflow-scheduler:
-    image: apache/airflow:2.9.2
+    image: custom-airflow:2.9.2
     container_name: airflow-scheduler
     depends_on:
       - postgres
@@ -100,14 +105,16 @@ services:
     env_file:
       - .env.airflow
     volumes:
+      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
+      - ./spark-apps:/opt/spark/jobs 
       - ./plugins:/opt/airflow/plugins
     command: scheduler
     restart: always
 
   airflow-worker:
-    image: apache/airflow:2.9.2
+    image: custom-airflow:2.9.2
     container_name: airflow-worker
     depends_on:
       - postgres
@@ -115,8 +122,10 @@ services:
     env_file:
       - .env.airflow
     volumes:
+      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
+      - ./spark-apps:/opt/spark/jobs 
       - ./plugins:/opt/airflow/plugins
     command: celery worker
     restart: always
@@ -142,3 +151,4 @@ services:
 volumes:
   pg_data:
   spark-logs:
+  airflow-logs:
