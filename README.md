@@ -1,4 +1,4 @@
-# Learn data engineering in Scala, PySpark 
+#  data engineering in Scala, PySpark 
 
   Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
   All the scripts and code are easy to test and run in local before submit to cloud server.  
@@ -153,7 +153,14 @@ Airflow is ready to use, but all the example dags are not shown as development e
 |1| airflow dags list | list all dags | 
 |2| airflow dags list-runs --dag-id <dag_id> | show the running dags status | 
 
+### Airflow operator use in this project
 
+- Spark 
+- Kakfa 
+- Bash 
+
+### Airflow variables setup 
+![System Architecture](asserts/sparkVariable.png)
 
 # Login pages 
 This project supports to use UI
@@ -335,6 +342,9 @@ we can check the spark process in UI and it is also a dag.
 
 ![Spark Architecture](asserts/spark-application.png)
 
+
+# Log retention 
+- delete the log after 15 days 
 
 # Business values 
 - Same report for OLD CRM system is monolithic and some are running in Mirco service 
