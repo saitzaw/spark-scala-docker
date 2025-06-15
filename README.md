@@ -146,6 +146,15 @@ make airflow-create-user
 ```
 Airflow is ready to use, but all the example dags are not shown as development environment. 
 
+### Airflow CLI commands 
+
+| # | cli | description | 
+|:-:|:---:|:-----------:|
+|1| airflow dags list | list all dags | 
+|2| airflow dags list-runs --dag-id <dag_id> | show the running dags status | 
+
+
+
 # Login pages 
 This project supports to use UI
 1. Spark master UI 
@@ -158,6 +167,7 @@ This project supports to use UI
 After building the docker images and up the process, check the spark UI
 
 | # | url | Description | 
+|:-:|:---------------------:|:------------:|
 | 1 | http://localhost:8080 | spark master | 
 | 2 | http://localhost:8081 | spark worker | 
 | 3 | http://localhost:18080| spark histoircal server | 
