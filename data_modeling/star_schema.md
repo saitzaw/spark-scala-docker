@@ -106,6 +106,8 @@
 | `fiscal_year`   | Year                                | `GJAHR`                          |
 | `posting_date`  | Date                                | Derived from `PERIO` and `GJAHR` |
 
+
+
 ### Share table 
 dim_customer (from KNA1)
 
