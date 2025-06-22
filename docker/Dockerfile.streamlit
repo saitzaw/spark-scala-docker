@@ -1,0 +1,33 @@
+# === Base Image: Python 3.12.9 with JDK ===
+FROM python:3.12.9-bullseye AS spark-report-base
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        openjdk-11-jdk \
+        curl \
+        unzip \
+        sudo \
+        vim \
+        build-essential && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+# === Install Python packages ===
+RUN pip install --no-cache-dir \
+    python-dotenv \
+    streamlit \
+    psycopg2-binary \
+    pandas \
+    numpy \
+    sqlalchemy 
+
+# === Working directory for streamlit ===
+WORKDIR /opt/report
+RUN mkdir -p /opt/report
+
+# === Expose streamlit ===
+EXPOSE 3030
+
+# === Start streamlit ===
+CMD ["streamlit", "run", "app.py", "--server.port=3030", "--server.address=0.0.0.0"]
