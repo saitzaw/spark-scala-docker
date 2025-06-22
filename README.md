@@ -354,6 +354,7 @@ we can check the spark process in UI and it is also a dag.
 - report generation in pdf and in excel 
 - ON DEMANd ad-hoc report supprot 
 - Master data management 
+- SAP and Salesfoce data as simple [SD, FICO and ]
 
 # Next plan 
 - Full ETL pipeline in Scala 
@@ -362,5 +363,5 @@ we can check the spark process in UI and it is also a dag.
 - CI/CD 
 - Data profiler 
 - Integration with DBT 
-- Integration with Apache Iceberg and Delta lake 
+- Integration with Apache Iceberg 
 - integration with Aapche Kafka
