@@ -90,6 +90,11 @@ REMARK: edit and make sure the parameters before image  build and docker compose
 
 REMARK: Don't run make rebuild or make clean. It will take more tike to build a docker image and repulling the required images. 
 
+# Buinses Domain 
+- SAP (SD, FICO, COPA) and 
+- Salesforce (CRM)
+- Data catalog and data lineage 
+
 
 # BUILD and Setup 
 ## BUILD 
@@ -346,6 +351,11 @@ we can check the spark process in UI and it is also a dag.
 # Log retention 
 - delete the log after 15 days 
 
+# Data compliance
+- General Data Protection Regulation (GDPR) 
+- Health Insurance Portability and Accountability Act (HIPAA) 
+- Payment Card Industry Data Security Standards (PCI-DSS)
+
 # Business values 
 - Same report for OLD CRM system is monolithic and some are running in Mirco service 
 - Real time data analysis support
@@ -357,6 +367,9 @@ we can check the spark process in UI and it is also a dag.
 - SAP and Salesfoce data as simple [SD, FICO and ]
 
 # Next plan 
+- Add MINIO for object storage 
+- Add Openlineage for data lineage 
+- Add Openmetadata for Metadaa 
 - Full ETL pipeline in Scala 
 - Jupyter notebook login 
 - DataVault 2.0 and SCD type 2 for address and historical tracking 
@@ -365,3 +378,4 @@ we can check the spark process in UI and it is also a dag.
 - Integration with DBT 
 - Integration with Apache Iceberg 
 - integration with Aapche Kafka
+- intgration with Debezium 
