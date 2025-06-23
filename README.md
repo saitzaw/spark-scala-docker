@@ -377,5 +377,4 @@ we can check the spark process in UI and it is also a dag.
 - Data profiler 
 - Integration with DBT 
 - Integration with Apache Iceberg 
-- integration with Aapche Kafka
-- intgration with Debezium 
+
