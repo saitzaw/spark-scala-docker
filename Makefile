@@ -46,3 +46,21 @@ scheduler:
 
 redis:
 	docker exec -it redis bash
+
+airflow-dags-list:
+	docker exec -it airflow-webserver airflow dags list
+
+kafka-logs:
+	docker logs kakfa
+
+spark-logs:
+	docker logs spark-master
+
+spark-worker-logs:
+	docker logs spark-worker
+
+airflow-logs:
+	docker logs airflow-webserver
+
+postgres-logs:
+	docker logs postgres
