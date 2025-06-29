@@ -395,7 +395,8 @@ we can check the spark process in UI and it is also a dag.
 - report generation in pdf and in excel 
 - ON DEMANd ad-hoc report supprot 
 - Master data management 
-- SAP and Salesfoce data as simple [SD, FICO and ]
+- SAP and Salesfoce data as simple [SD, FICO, MW and MM ]
+- SAP in lakehouse sample and lineage 
 
 # Next plan 
 - Add MINIO for object storage 
@@ -408,4 +409,5 @@ we can check the spark process in UI and it is also a dag.
 - Data profiler 
 - Integration with DBT 
 - Integration with Apache Iceberg 
+- ELK stack for indexing and Enterprise search
 
