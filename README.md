@@ -186,9 +186,12 @@ After building the docker images and up the process, check the spark UI
 | 4 | http://localhost:8088 | airflow web ui | 
 | 5 | http://localhost:4040 | spark application | 
 | 6 | http://localhost:8888 | Jupyter UI | 
+| 7 | http://localhost:9021 | Kafka control UI | 
+
 
 REMARK: Jupyter needs to use access token each time 
 TODO: username and password based login 
+TODO: add SSL for for secure in production deployment  
 
 e.g. of Spark UI 
 ![Spark Architecture](asserts/spark-master.png)
@@ -198,6 +201,34 @@ e.g. of Spark UI
 This project use the Apache airflow as a data orchestrator. It supports to run spark-submit and others jobs.  
 e.g. of airflow UI 
 ![Airflow UI](asserts/airflowUI.png)
+
+## Kafka Control center
+For streaming data 
+![Kafka Control center](asserts/confluenct.png)
+
+## Debezium connection 
+- To run connect CDC postgresql 
+
+```JSON
+curl -X POST http://localhost:8083/connectors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "pg-connector",
+    "config": {
+      "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+      "database.hostname": "postgres",
+      "database.port": "5432",
+      "database.user": "youruser",
+      "database.password": "yourpass",
+      "database.dbname": "yourdb",
+      "database.server.name": "pgserver",
+      "plugin.name": "pgoutput",
+      "slot.name": "debezium_slot",
+      "publication.name": "debezium_pub",
+      "table.include.list": "public.your_table"
+    }
+  }'
+```
 
 ## Sample ER diagarm
 This is the sample ER diagram of Old ORM system without having a proper columns name. 
