@@ -373,6 +373,21 @@ Add the requried data to connection and use the default IP addess get from the i
 - Postgresql user name and password 
 - postgresql jdbc connector location issue 
 
+### Debezium connector checking 
+```
+curl http://localhost:8083/connector-plugins
+```
+
+if the above command is not reply anything check with this command 
+```
+docker exec -it debezium curl http://localhost:8083/connector-plugins
+```
+
+### Debezuim connector type 
+- Avro 
+- Json 
+
+
 # check the process in UI
 we can check the spark process in UI and it is also a dag.  
 
