@@ -51,7 +51,7 @@ airflow-dags-list:
 	docker exec -it airflow-webserver airflow dags list
 
 kafka-logs:
-	docker logs kakfa
+	docker logs kafka
 
 spark-logs:
 	docker logs spark-master
@@ -64,3 +64,6 @@ airflow-logs:
 
 postgres-logs:
 	docker logs postgres
+
+kafka-data-clean: 
+	rm -rf ./kafka/data/
