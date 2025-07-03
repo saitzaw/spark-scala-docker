@@ -216,6 +216,26 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8085
       PLUGIN_PATH: /kafka/connect
+
+  dbt:
+    container_name: dbt
+    build:
+      context: .
+      dockerfile: docker/dbt.Dockerfile
+    depends_on:
+      - postgres
+      - airflow-webserver
+      - spark-master
+    volumes:
+      - ./dbt:/usr/app
+      - ./dags:/opt/airflow/dags         # allow airflow to see same DAGs
+      - ./spark-apps:/opt/spark/jobs     # if using Spark
+      - ./spark-logs:/opt/spark/spark-events
+    working_dir: /usr/app
+    environment:
+      DBT_PROFILES_DIR: /usr/app/profiles
+    command: tail -f /dev/null
+
   postgres:
     image: postgres:15
     container_name: postgres
