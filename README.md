@@ -77,16 +77,21 @@ REMARK: edit and make sure the parameters before image  build and docker compose
 | 2 | confs | spark configuration file | 
 | 3 | dags | apache airflow dags file folder | 
 | 4 | data | data folder for spark and pyspark script | 
-| 5 | docker | docker files location | 
-| 6 | init-sql | sql related folders | 
-| 7 | logs* | auto generate from apache airflow| 
-| 8 | notebooks | location for data analysis and data scientist | 
-| 9 | pg_data* | auto generate and volumn mount for postgresql | 
-| 10| plugins | Apache Airflow plugins file here | 
-| 11| reports | report generators | 
-| 12| result-jar| jar files collection and use in spark-submit | 
-| 13| spark-apps| scala and python development folder | 
-| 14| spark-logs| external log folder for spark| 
+| 5 | data-modeling | for data modeling |
+| 6 | data-platfrom | next comming IaC | 
+| 7 | dbt | data build tool for tranformation and analytics |  
+| 8 | docker | docker files location | 
+| 9 | init-sql | sql related folders | 
+| 10 | logs* | auto generate from apache airflow| 
+| 11 | notebooks | location for data analysis and data scientist | 
+| 12 | pg_data* | auto generate and volumn mount for postgresql | 
+| 13 | plugins | Apache Airflow plugins file here | 
+| 14 | reports | report generators | 
+| 15 | result-jar| jar files collection and use in spark-submit | 
+| 16 | sap-data | sample sap data from Kaggel | 
+| 17 | spark-apps| scala and python development folder | 
+| 18 | spark-logs| external log folder for spark| 
+
 
 REMARK: Don't run make rebuild or make clean. It will take more tike to build a docker image and repulling the required images. 
 
@@ -163,6 +168,7 @@ Airflow is ready to use, but all the example dags are not shown as development e
 - Spark 
 - Kakfa 
 - Bash 
+- dbt 
 
 ### Airflow variables setup 
 ![System Architecture](asserts/sparkVariable.png)
@@ -228,6 +234,16 @@ curl -X POST http://localhost:8083/connectors \
       "table.include.list": "public.your_table"
     }
   }'
+```
+
+## DBT (data build tool)
+```shell 
+make dbt-shell 
+```
+
+in the shell start this 
+```shell 
+dbt init sap_landing
 ```
 
 ## Sample ER diagarm
@@ -374,13 +390,21 @@ Add the requried data to connection and use the default IP addess get from the i
 - postgresql jdbc connector location issue 
 
 ### Debezium connector checking 
-```
+```bash
 curl http://localhost:8083/connector-plugins
 ```
+Remark: it needs to run double to get the response from server 
 
 if the above command is not reply anything check with this command 
-```
+```bash 
 docker exec -it debezium curl http://localhost:8083/connector-plugins
+```
+
+
+### Kafka cannot write log 
+```bash 
+sudo chown -R 1000:1000 ./kafka-data
+sudo chmod -R 755 ./kafka-data
 ```
 
 ### Debezuim connector type 
@@ -418,11 +442,9 @@ we can check the spark process in UI and it is also a dag.
 - Add Openlineage for data lineage 
 - Add Openmetadata for Metadaa 
 - Full ETL pipeline in Scala 
-- Jupyter notebook login 
 - DataVault 2.0 and SCD type 2 for address and historical tracking 
 - CI/CD 
 - Data profiler 
-- Integration with DBT 
 - Integration with Apache Iceberg 
 - ELK stack for indexing and Enterprise search
 
