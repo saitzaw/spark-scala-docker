@@ -28,3 +28,4 @@ kafka/
 **/kafka-connect-s3-logs
 **/kafka-connect-redis-logs
 kafka-data/
+dbt/profiles/profiles.yml
