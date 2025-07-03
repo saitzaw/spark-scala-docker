@@ -67,3 +67,6 @@ postgres-logs:
 
 kafka-data-clean: 
 	rm -rf ./kafka/data/
+
+dbt-shell:
+	docker exec -it dbt bash
