@@ -1,0 +1,115 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'sap_landing'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'sap_landing'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# In this example config, we tell dbt to build all models in the example/
+# directory as views. These settings can be overridden in the individual model
+# files using the `{{ config(...) }}` macro.
+seeds:
+  sap_landing:
+    # Config indicated by + and applies to all files under seeds/sap_landing/
+    seeds:
+  sap_landing:
+    bseg:
+      +schema: sap
+      +column_types:
+        mandt: varchar(4)
+        bukrs: varchar(10)
+        belnr: varchar(10)
+        gjahr: integer
+        buzei: integer
+        buzid: varchar(10)
+        augdt: date
+        augcp: text
+        augbl: text
+        bschl: varchar(10)
+        koart: varchar(10)
+        umskz: varchar(4)
+        umsks: varchar(4)
+        zumsk: varchar(4)
+        shkzg: varchar(10)
+        gsber: text
+        pargb: text
+        mwskz: varchar(4)
+        qsskz: varchar(4)
+        dmbtr: numeric
+        wrbtr: numeric
+        kzbtr: numeric
+        pswbt: text
+        pswsl: text
+        txbhw: numeric
+        txbfw: numeric
+        mwsts: numeric
+        wmwst: text
+        hwbas: numeric
+        fwbas: numeric
+        hwzuz: numeric
+        fwzuz: numeric
+        shzuz: numeric
+        stekz: varchar(4)
+        mwart: varchar(4)
+        txgrp: boolean
+        ktosl: text
+        qsshb: text
+        kursr: numeric
+        gbetr: text
+        bdiff: text
+        bdif2: text
+        valut: date
+        zuonr: text
+        sgtxt: varchar(10)
+        zinkz: varchar(10)
+        vbund: text
+        bewar: text
+        altkt: text
+        vorgn: text
+        fdlev: integer
+        fdgrp: integer
+        fdwbt: text
+        fdtag: date
+        fkont: text
+        kokrs: text
+        kostl: varchar(10)
+        projn: text
+        aufnr: varchar(10)
+        vbeln: varchar(10)
+        vbel2: text
+        posn2: text
+        eten2: text
+        anln1: varchar(10)
+        anln2: varchar(10)
+        anbwa: text
+        bzdat: date
+        pernr: integer
+        xumsw: boolean
+        xh: text
+
+models:
+  sap_landing:
+    # Config indicated by + and applies to all files under models/example/
+    example:
+      +materialized: view
