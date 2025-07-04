@@ -127,7 +127,7 @@ psql -U sparkuser -d sparkdb
 ```
 ### create and insert all seed values in pg using init.sh 
 Remark: init.sh is in the sql_scripts folder
-```
+```shell 
 ./init.sh 
 ```
 ### Airflow setup
@@ -237,14 +237,41 @@ curl -X POST http://localhost:8083/connectors \
 ```
 
 ## DBT (data build tool)
+The folder is using underscore, because this should be managed by python script
+
+### init the shell 
 ```shell 
 make dbt-shell 
 ```
-
+### create sbt scaffold 
 in the shell start this 
 ```shell 
 dbt init sap_landing
 ```
+
+### host machine 
+For docker to read profile.yml from host machine 
+```shell 
+cp sap_dbt 
+mkdir .dbt
+cp profiles/profiles.yml .dbt/
+sudo chmod $USER:$USER .dbt/profiles.yml
+```
+
+DBT debug cannot run for the init so, use some tweak to initailize 
+```shell 
+cp sap_dbt 
+mv sap_landing/* . 
+sudo chmod $USER:$USER -R sap_dbt
+```
+
+add the data to seeds folder [get data from Kaggel SAP]
+```shell 
+curl -L -o ~/Downloads/sap-dataset-bigquery-dataset.zip\
+  https://www.kaggle.com/api/v1/datasets/download/mustafakeser4/sap-dataset-bigquery-dataset
+```
+REMARK TESTING PURPOSE I reduce bseg and big csv file to smaller chunk 5000 records 
+
 
 ## Sample ER diagarm
 This is the sample ER diagram of Old ORM system without having a proper columns name. 
@@ -399,7 +426,7 @@ if the above command is not reply anything check with this command
 ```bash 
 docker exec -it debezium curl http://localhost:8083/connector-plugins
 ```
-
+### DBT 
 
 ### Kafka cannot write log 
 ```bash 
