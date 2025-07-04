@@ -219,6 +219,7 @@ services:
 
   dbt:
     container_name: dbt
+    user: "1000:1000"
     build:
       context: .
       dockerfile: docker/dbt.Dockerfile
