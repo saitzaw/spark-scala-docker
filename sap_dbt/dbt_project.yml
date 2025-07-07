@@ -22,91 +22,293 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+seeds:
+  sap_landing:  # Replace with your actual project name
+    adr6:
+      - name: adr6
+        description: "Seed for SAP ADR6 address email data"
+        columns:
+          - name: client
+            data_type: varchar(3)
+          - name: addrnumber
+            data_type: varchar(10)
+          - name: persnumber
+            data_type: varchar(10)
+          - name: date_from
+            data_type: date
+          - name: consnumber
+            data_type: varchar(3)
+          - name: flgdefault
+            data_type: boolean
+          - name: flg_nouse
+            data_type: boolean
+          - name: home_flag
+            data_type: boolean
+          - name: smtp_addr
+            data_type: varchar(241)
+          - name: smtp_srch
+            data_type: varchar(241)
+          - name: dft_receiv
+            data_type: boolean
+          - name: r3_user
+            data_type: varchar(12)
+          - name: encode
+            data_type: varchar(3)
+          - name: tnef
+            data_type: boolean
+          - name: valid_from
+            data_type: date
+          - name: valid_to
+            data_type: date
+          - name: operation_flag
+            data_type: varchar(1)
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
+    
+    adrc:
+      - name: adrc
+        description: "Seed for SAP ADRC address data"
+        columns:
+          - name: client
+            data_type: varchar(3)
+          - name: addrnumber
+            data_type: varchar(10)
+          - name: date_from
+            data_type: date
+          - name: nation
+            data_type: varchar(3)
+          - name: date_to
+            data_type: date
+          - name: title
+            data_type: varchar(15)
+          - name: name1
+            data_type: varchar(40)
+          - name: name2
+            data_type: varchar(40)
+          - name: name3
+            data_type: varchar(40)
+          - name: name4
+            data_type: varchar(40)
+          - name: name_text
+            data_type: varchar(100)
+          - name: name_co
+            data_type: varchar(40)
+          - name: city1
+            data_type: varchar(40)
+          - name: city2
+            data_type: varchar(40)
+          - name: city_code
+            data_type: varchar(10)
+          - name: cityp_code
+            data_type: varchar(10)
+          - name: home_city
+            data_type: varchar(40)
+          - name: cityh_code
+            data_type: varchar(10)
+          - name: chckstatus
+            data_type: varchar(1)
+          - name: regiogroup
+            data_type: varchar(8)
+          - name: post_code1
+            data_type: varchar(10)
+          - name: post_code2
+            data_type: varchar(10)
+          - name: post_code3
+            data_type: varchar(10)
+          - name: pcode1_ext
+            data_type: varchar(5)
+          - name: pcode2_ext
+            data_type: varchar(5)
+          - name: pcode3_ext
+            data_type: varchar(5)
+          - name: po_box
+            data_type: varchar(10)
+          - name: dont_use_p
+            data_type: boolean
+          - name: po_box_num
+            data_type: varchar(10)
+          - name: po_box_loc
+            data_type: varchar(40)
+          - name: city_code2
+            data_type: varchar(10)
+          - name: po_box_reg
+            data_type: varchar(3)
+          - name: po_box_cty
+            data_type: varchar(40)
+          - name: postalarea
+            data_type: varchar(10)
+          - name: transpzone
+            data_type: varchar(10)
+          - name: street
+            data_type: varchar(60)
+          - name: dont_use_s
+            data_type: boolean
+          - name: streetcode
+            data_type: varchar(12)
+          - name: streetabbr
+            data_type: varchar(10)
+          - name: house_num1
+            data_type: varchar(10)
+          - name: house_num2
+            data_type: varchar(10)
+          - name: house_num3
+            data_type: varchar(10)
+          - name: str_suppl1
+            data_type: varchar(40)
+          - name: str_suppl2
+            data_type: varchar(40)
+          - name: str_suppl3
+            data_type: varchar(40)
+          - name: location
+            data_type: varchar(10)
+          - name: building
+            data_type: varchar(10)
+          - name: floor
+            data_type: varchar(10)
+          - name: roomnumber
+            data_type: varchar(10)
+          - name: country
+            data_type: varchar(3)
+          - name: langu
+            data_type: varchar(2)
+          - name: region
+            data_type: varchar(3)
+          - name: addr_group
+            data_type: varchar(4)
+          - name: flaggroups
+            data_type: varchar(10)
+          - name: pers_addr
+            data_type: boolean
+          - name: sort1
+            data_type: varchar(20)
+          - name: sort2
+            data_type: varchar(20)
+          - name: sort_phn
+            data_type: varchar(20)
+          - name: deflt_comm
+            data_type: boolean
+          - name: tel_number
+            data_type: varchar(30)
+          - name: tel_extens
+            data_type: varchar(10)
+          - name: fax_number
+            data_type: varchar(30)
+          - name: fax_extens
+            data_type: varchar(10)
+          - name: flagcomm2
+            data_type: boolean
+          - name: flagcomm3
+            data_type: boolean
+          - name: flagcomm4
+            data_type: boolean
+          - name: flagcomm5
+            data_type: boolean
+          - name: flagcomm6
+            data_type: boolean
+          - name: flagcomm7
+            data_type: boolean
+          - name: flagcomm8
+            data_type: boolean
+          - name: flagcomm9
+            data_type: boolean
+          - name: flagcomm10
+            data_type: boolean
+          - name: flagcomm11
+            data_type: boolean
+          - name: flagcomm12
+            data_type: boolean
+          - name: flagcomm13
+            data_type: boolean
+          - name: addrorigin
+            data_type: varchar(3)
+          - name: mc_name1
+            data_type: varchar(40)
+          - name: mc_city1
+            data_type: varchar(40)
+          - name: mc_street
+            data_type: varchar(60)
+          - name: extension1
+            data_type: varchar(30)
+          - name: extension2
+            data_type: varchar(30)
+          - name: time_zone
+            data_type: varchar(6)
+          - name: taxjurcode
+            data_type: varchar(15)
+          - name: address_id
+            data_type: varchar(32)
+          - name: langu_crea
+            data_type: varchar(2)
+          - name: adrc_uuid
+            data_type: varchar(36)
+          - name: uuid_belated
+            data_type: varchar(36)
+          - name: id_category
+            data_type: varchar(4)
+          - name: adrc_err_status
+            data_type: varchar(2)
+          - name: po_box_lobby
+            data_type: varchar(30)
+          - name: deli_serv_type
+            data_type: varchar(2)
+          - name: deli_serv_number
+            data_type: varchar(10)
+          - name: county_code
+            data_type: varchar(10)
+          - name: county
+            data_type: varchar(40)
+          - name: township_code
+            data_type: varchar(10)
+          - name: township
+            data_type: varchar(40)
+          - name: mc_county
+            data_type: varchar(40)
+          - name: mc_township
+            data_type: varchar(40)
+          - name: xpcpt
+            data_type: boolean
+          - name: operation_flag
+            data_type: varchar(1)
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
 
+    adrct:
+      # ADRCT table contains address texts in different languages
+      # This seed data is for the ADRCT table, which stores address texts
+      # in different languages for addresses in SAP
+      - name: adrct
+        description: "Seed data for SAP ADRCT (Address Texts)"
+        columns:
+          - name: client
+            data_type: varchar(3)
+          - name: addrnumber
+            data_type: varchar(10)
+          - name: date_from
+            data_type: date
+          - name: nation
+            data_type: varchar(3)
+          - name: langu
+            data_type: varchar(2)
+          - name: remark
+            data_type: text
+          - name: operation_flag
+            data_type: varchar(1)
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
+            
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 # In this example config, we tell dbt to build all models in the example/
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
-seeds:
-  sap_landing:
-    # Config indicated by + and applies to all files under seeds/sap_landing/
-    seeds:
-  sap_landing:
-    bseg:
-      +schema: sap
-      +column_types:
-        mandt: varchar(4)
-        bukrs: varchar(10)
-        belnr: varchar(10)
-        gjahr: integer
-        buzei: integer
-        buzid: varchar(10)
-        augdt: date
-        augcp: text
-        augbl: text
-        bschl: varchar(10)
-        koart: varchar(10)
-        umskz: varchar(4)
-        umsks: varchar(4)
-        zumsk: varchar(4)
-        shkzg: varchar(10)
-        gsber: text
-        pargb: text
-        mwskz: varchar(4)
-        qsskz: varchar(4)
-        dmbtr: numeric
-        wrbtr: numeric
-        kzbtr: numeric
-        pswbt: text
-        pswsl: text
-        txbhw: numeric
-        txbfw: numeric
-        mwsts: numeric
-        wmwst: text
-        hwbas: numeric
-        fwbas: numeric
-        hwzuz: numeric
-        fwzuz: numeric
-        shzuz: numeric
-        stekz: varchar(4)
-        mwart: varchar(4)
-        txgrp: boolean
-        ktosl: text
-        qsshb: text
-        kursr: numeric
-        gbetr: text
-        bdiff: text
-        bdif2: text
-        valut: date
-        zuonr: text
-        sgtxt: varchar(10)
-        zinkz: varchar(10)
-        vbund: text
-        bewar: text
-        altkt: text
-        vorgn: text
-        fdlev: integer
-        fdgrp: integer
-        fdwbt: text
-        fdtag: date
-        fkont: text
-        kokrs: text
-        kostl: varchar(10)
-        projn: text
-        aufnr: varchar(10)
-        vbeln: varchar(10)
-        vbel2: text
-        posn2: text
-        eten2: text
-        anln1: varchar(10)
-        anln2: varchar(10)
-        anbwa: text
-        bzdat: date
-        pernr: integer
-        xumsw: boolean
-        xh: text
+
 
 models:
   sap_landing:

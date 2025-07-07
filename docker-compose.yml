@@ -228,7 +228,7 @@ services:
       - airflow-webserver
       - spark-master
     volumes:
-      - ./dbt:/usr/app
+      - ./sap_dbt:/usr/app
       - ./dags:/opt/airflow/dags         # allow airflow to see same DAGs
       - ./spark-apps:/opt/spark/jobs     # if using Spark
       - ./spark-logs:/opt/spark/spark-events
