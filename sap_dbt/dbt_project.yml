@@ -301,7 +301,585 @@ seeds:
             data_type: boolean
           - name: recordstamp
             data_type: timestamp
-            
+    
+    ankt:  
+      - name: ankt
+        description: "Seed for SAP asset class text descriptions"
+        columns:
+          - name: mandt
+            data_type: varchar(3)
+          - name: spras
+            data_type: varchar(1)     # language key
+          - name: anlkl
+            data_type: varchar(8)     # asset class key
+          - name: txk20
+            data_type: varchar(10)    # short text
+          - name: txk50
+            data_type: varchar(50)    # medium text
+          - name: txt50
+            data_type: varchar(50)    # description
+          - name: txa50
+            data_type: varchar(50)    # long text
+          - name: xltxid
+            data_type: varchar(40)    # optional key/text id
+          - name: operation_flag
+            data_type: varchar(1)     # e.g. I/U/D
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
+    
+    anla:             # This must match the CSV file: `anla.csv`
+      - name: anla
+      # This seed data is for the SAP ANLA table, which contains asset master data
+        description: "Seed data for SAP ANLA (Asset Master)"
+        columns:
+          - name: mandt
+            data_type: varchar(3)
+          - name: bukrs
+            data_type: varchar(4)
+          - name: anln1
+            data_type: varchar(12)
+          - name: anln2
+            data_type: varchar(4)
+          - name: anlkl
+            data_type: varchar(8)
+          - name: gegst
+            data_type: varchar(8)
+          - name: anlar
+            data_type: varchar(8)
+          - name: ernam
+            data_type: varchar(12)
+          - name: erdat
+            data_type: date
+          - name: aenam
+            data_type: varchar(12)
+          - name: aedat
+            data_type: date
+          - name: xloev
+            data_type: boolean
+          - name: xspeb
+            data_type: boolean
+          - name: felei
+            data_type: varchar(4)
+          - name: ktogr
+            data_type: varchar(4)
+          - name: xopvw
+            data_type: boolean
+          - name: anltp
+            data_type: varchar(4)
+          - name: zujhr
+            data_type: varchar(4)
+          - name: zuper
+            data_type: varchar(3)
+          - name: zugdt
+            data_type: date
+          - name: aktiv
+            data_type: date
+          - name: abgdt
+            data_type: date
+          - name: deakt
+            data_type: varchar(1)
+          - name: gplab
+            data_type: varchar(4)
+          - name: bstdt
+            data_type: date
+          - name: ord41
+            data_type: varchar(4)
+          - name: ord42
+            data_type: varchar(4)
+          - name: ord43
+            data_type: varchar(4)
+          - name: ord44
+            data_type: varchar(4)
+          - name: anlue
+            data_type: varchar(4)
+          - name: zuawa
+            data_type: varchar(4)
+          - name: aneqk
+            data_type: varchar(4)
+          - name: aneqs
+            data_type: varchar(4)
+          - name: lifnr
+            data_type: varchar(10)
+          - name: land1
+            data_type: varchar(3)
+          - name: liefe
+            data_type: varchar(40)
+          - name: herst
+            data_type: varchar(30)
+          - name: eigkz
+            data_type: varchar(1)
+          - name: aibn1
+            data_type: varchar(12)
+          - name: aibn2
+            data_type: varchar(4)
+          - name: aibdt
+            data_type: date
+          - name: urjhr
+            data_type: varchar(4)
+          - name: urwrt
+            data_type: numeric(15,2)
+          - name: antei
+            data_type: numeric(5,2)
+          - name: projn
+            data_type: varchar(24)
+          - name: eaufn
+            data_type: varchar(12)
+          - name: meins
+            data_type: varchar(3)
+          - name: menge
+            data_type: numeric(15,3)
+          - name: typbz
+            data_type: varchar(2)
+          - name: izwek
+            data_type: varchar(3)
+          - name: inken
+            data_type: numeric(15,2)
+          - name: ivdat
+            data_type: date
+          - name: invzu
+            data_type: varchar(10)
+          - name: vmgli
+            data_type: varchar(10)
+          - name: xvrmw
+            data_type: boolean
+          - name: wrtma
+            data_type: numeric(15,2)
+          - name: ehwrt
+            data_type: numeric(15,2)
+          - name: aufla
+            data_type: varchar(10)
+          - name: ehwzu
+            data_type: varchar(10)
+          - name: ehwnr
+            data_type: varchar(10)
+          - name: gruvo
+            data_type: date
+          - name: grein
+            data_type: date
+          - name: grbnd
+            data_type: date
+          - name: grblt
+            data_type: varchar(3)
+          - name: grlfd
+            data_type: varchar(10)
+          - name: flurk
+            data_type: varchar(10)
+          - name: flurn
+            data_type: varchar(10)
+          - name: fiamt
+            data_type: varchar(10)
+          - name: stadt
+            data_type: varchar(40)
+          - name: grund
+            data_type: varchar(4)
+          - name: feins
+            data_type: varchar(4)
+          - name: grufl
+            data_type: varchar(4)
+          - name: invnr
+            data_type: varchar(12)
+          - name: vbund
+            data_type: varchar(6)
+          - name: spras
+            data_type: varchar(1)
+          - name: txt50
+            data_type: varchar(50)
+          - name: txa50
+            data_type: varchar(50)
+          - name: xltxid
+            data_type: varchar(40)
+          - name: xverid
+            data_type: varchar(10)
+          - name: xtchid
+            data_type: varchar(10)
+          - name: xkalid
+            data_type: varchar(10)
+          - name: xherid
+            data_type: varchar(10)
+          - name: xleaid
+            data_type: varchar(10)
+          - name: leafi
+            data_type: varchar(10)
+          - name: lvdat
+            data_type: date
+          - name: lkdat
+            data_type: date
+          - name: leabg
+            data_type: date
+          - name: lejar
+            data_type: varchar(4)
+          - name: leper
+            data_type: varchar(3)
+          - name: lryth
+            data_type: varchar(3)
+          - name: legeb
+            data_type: varchar(4)
+          - name: lbasw
+            data_type: varchar(4)
+          - name: lkauf
+            data_type: varchar(4)
+          - name: lmzin
+            data_type: numeric(5,2)
+          - name: lzins
+            data_type: numeric(5,2)
+          - name: ltzbw
+            data_type: numeric(15,2)
+          - name: lkuza
+            data_type: varchar(4)
+          - name: lkuzi
+            data_type: varchar(4)
+          - name: llavb
+            data_type: varchar(4)
+          - name: leanz
+            data_type: varchar(4)
+          - name: lvtnr
+            data_type: varchar(12)
+          - name: letxt
+            data_type: varchar(100)
+          - name: xaktiv
+            data_type: boolean
+          - name: anupd
+            data_type: varchar(1)
+          - name: lblnr
+            data_type: varchar(10)
+          - name: xv0dt
+            data_type: date
+          - name: xv0nm
+            data_type: varchar(12)
+          - name: xv1dt
+            data_type: date
+          - name: xv1nm
+            data_type: varchar(12)
+          - name: xv2dt
+            data_type: date
+          - name: xv2nm
+            data_type: varchar(12)
+          - name: xv3dt
+            data_type: date
+          - name: xv3nm
+            data_type: varchar(12)
+          - name: xv4dt
+            data_type: date
+          - name: xv4nm
+            data_type: varchar(12)
+          - name: xv5dt
+            data_type: date
+          - name: xv5nm
+            data_type: varchar(12)
+          - name: xv6dt
+            data_type: date
+          - name: xv6nm
+            data_type: varchar(12)
+          - name: aimmo
+            data_type: varchar(20)
+          - name: objnr
+            data_type: varchar(22)
+          - name: leart
+            data_type: varchar(4)
+          - name: lvors
+            data_type: varchar(4)
+          - name: gdlgrp
+            data_type: varchar(4)
+          - name: posnr
+            data_type: varchar(6)
+          - name: xerwrt
+            data_type: numeric(15,2)
+          - name: xafabch
+            data_type: varchar(1)
+          - name: xanlgr
+            data_type: varchar(4)
+          - name: mcoa1
+            data_type: varchar(10)
+          - name: xinvm
+            data_type: varchar(1)
+          - name: sernr
+            data_type: varchar(30)
+          - name: umwkz
+            data_type: varchar(5)
+          - name: lrvdat
+            data_type: date
+          - name: act_change_pm
+            data_type: varchar(1)
+          - name: has_tddp
+            data_type: boolean
+          - name: last_reorg_date
+            data_type: date
+          - name: internal_code
+            data_type: varchar(20)
+          - name: approval_number
+            data_type: varchar(30)
+          - name: approval_version
+            data_type: varchar(10)
+          - name: bogus_anln1
+            data_type: varchar(12)
+          - name: asset_version
+            data_type: varchar(5)
+          - name: operation_flag
+            data_type: varchar(1)
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
+   
+    bkpf:             # The CSV file should be named bkpf.csv
+      - name: bkpf
+      # This seed data is for the SAP BKPF table, which contains accounting document headers
+        description: "Seed for SAP BKPF (Accounting Document Header)"
+        columns:
+          - name: mandt
+            data_type: varchar(3)
+          - name: bukrs
+            data_type: varchar(4)
+          - name: belnr
+            data_type: varchar(10)
+          - name: gjahr
+            data_type: varchar(4)
+          - name: blart
+            data_type: varchar(2)
+          - name: bldat
+            data_type: date
+          - name: budat
+            data_type: date
+          - name: monat
+            data_type: varchar(2)
+          - name: cpudt
+            data_type: date
+          - name: cputm
+            data_type: varchar(6)
+          - name: aedat
+            data_type: date
+          - name: upddt
+            data_type: date
+          - name: wwert
+            data_type: date
+          - name: usnam
+            data_type: varchar(12)
+          - name: tcode
+            data_type: varchar(20)
+          - name: bvorg
+            data_type: varchar(1)
+          - name: xblnr
+            data_type: varchar(16)
+          - name: dbblg
+            data_type: varchar(10)
+          - name: stblg
+            data_type: varchar(10)
+          - name: stjah
+            data_type: varchar(4)
+          - name: bktxt
+            data_type: varchar(50)
+          - name: waers
+            data_type: varchar(5)
+          - name: kursf
+            data_type: numeric(15,6)
+          - name: kzwrs
+            data_type: varchar(1)
+          - name: kzkrs
+            data_type: varchar(1)
+          - name: bstat
+            data_type: varchar(1)
+          - name: xnetb
+            data_type: boolean
+          - name: frath
+            data_type: varchar(1)
+          - name: xrueb
+            data_type: boolean
+          - name: glvor
+            data_type: varchar(4)
+          - name: grpid
+            data_type: varchar(10)
+          - name: dokid
+            data_type: varchar(10)
+          - name: arcid
+            data_type: varchar(10)
+          - name: iblar
+            data_type: varchar(2)
+          - name: awtyp
+            data_type: varchar(4)
+          - name: awkey
+            data_type: varchar(20)
+          - name: fikrs
+            data_type: varchar(4)
+          - name: hwaer
+            data_type: varchar(5)
+          - name: hwae2
+            data_type: varchar(5)
+          - name: hwae3
+            data_type: varchar(5)
+          - name: kurs2
+            data_type: numeric(15,6)
+          - name: kurs3
+            data_type: numeric(15,6)
+          - name: basw2
+            data_type: numeric(15,2)
+          - name: basw3
+            data_type: numeric(15,2)
+          - name: umrd2
+            data_type: numeric(15,2)
+          - name: umrd3
+            data_type: numeric(15,2)
+          - name: xstov
+            data_type: boolean
+          - name: stodt
+            data_type: date
+          - name: xmwst
+            data_type: boolean
+          - name: curt2
+            data_type: varchar(1)
+          - name: curt3
+            data_type: varchar(1)
+          - name: kuty2
+            data_type: varchar(1)
+          - name: kuty3
+            data_type: varchar(1)
+          - name: xsnet
+            data_type: boolean
+          - name: ausbk
+            data_type: varchar(1)
+          - name: xusvr
+            data_type: boolean
+          - name: duefl
+            data_type: varchar(1)
+          - name: awsys
+            data_type: varchar(10)
+          - name: txkrs
+            data_type: numeric(15,6)
+          - name: ctxkrs
+            data_type: numeric(15,6)
+          - name: lotkz
+            data_type: varchar(1)
+          - name: xwvof
+            data_type: boolean
+          - name: stgrd
+            data_type: varchar(4)
+          - name: ppnam
+            data_type: varchar(12)
+          - name: ppdat
+            data_type: date
+          - name: pptme
+            data_type: varchar(6)
+          - name: pptcod
+            data_type: varchar(4)
+          - name: brnch
+            data_type: varchar(10)
+          - name: numpg
+            data_type: varchar(4)
+          - name: adisc
+            data_type: varchar(1)
+          - name: xref1_hd
+            data_type: varchar(30)
+          - name: xref2_hd
+            data_type: varchar(30)
+          - name: xreversal
+            data_type: boolean
+          - name: reindat
+            data_type: date
+          - name: rldnr
+            data_type: varchar(2)
+          - name: ldgrp
+            data_type: varchar(4)
+          - name: propmano
+            data_type: varchar(10)
+          - name: xblnr_alt
+            data_type: varchar(30)
+          - name: vatdate
+            data_type: date
+          - name: doccat
+            data_type: varchar(1)
+          - name: xsplit
+            data_type: boolean
+          - name: cash_alloc
+            data_type: varchar(1)
+          - name: follow_on
+            data_type: varchar(10)
+          - name: xreorg
+            data_type: boolean
+          - name: subset
+            data_type: varchar(10)
+          - name: kurst
+            data_type: varchar(4)
+          - name: kursx
+            data_type: numeric(15,6)
+          - name: kur2x
+            data_type: numeric(15,6)
+          - name: kur3x
+            data_type: numeric(15,6)
+          - name: xmca
+            data_type: boolean
+          - name: resubmission
+            data_type: date
+          - name: sapf15_status
+            data_type: varchar(1)
+          - name: psoty
+            data_type: varchar(2)
+          - name: psoak
+            data_type: varchar(12)
+          - name: psoks
+            data_type: varchar(12)
+          - name: psosg
+            data_type: varchar(12)
+          - name: psofn
+            data_type: varchar(12)
+          - name: intform
+            data_type: varchar(10)
+          - name: intdate
+            data_type: date
+          - name: psobt
+            data_type: varchar(12)
+          - name: psozl
+            data_type: varchar(12)
+          - name: psodt
+            data_type: date
+          - name: psotm
+            data_type: varchar(6)
+          - name: fm_umart
+            data_type: varchar(2)
+          - name: ccins
+            data_type: varchar(1)
+          - name: ccnum
+            data_type: varchar(10)
+          - name: ssblk
+            data_type: varchar(1)
+          - name: batch
+            data_type: varchar(10)
+          - name: sname
+            data_type: varchar(30)
+          - name: sampled
+            data_type: boolean
+          - name: exclude_flag
+            data_type: boolean
+          - name: blind
+            data_type: boolean
+          - name: offset_status
+            data_type: varchar(1)
+          - name: offset_refer_dat
+            data_type: date
+          - name: penrc
+            data_type: varchar(10)
+          - name: knumv
+            data_type: varchar(10)
+          - name: pybastyp
+            data_type: varchar(4)
+          - name: pybasno
+            data_type: varchar(10)
+          - name: pybasdat
+            data_type: date
+          - name: pyiban
+            data_type: varchar(34)
+          - name: inwardno_hd
+            data_type: varchar(30)
+          - name: inwarddt_hd
+            data_type: date
+          - name: operation_flag
+            data_type: varchar(1)
+          - name: is_deleted
+            data_type: boolean
+          - name: recordstamp
+            data_type: timestamp
+
+              
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
