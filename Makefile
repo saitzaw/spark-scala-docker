@@ -1,6 +1,21 @@
 build:
 	docker compose build
 
+dev-spark-up:
+	 docker compose up spark-master spark-worker jupyter minio
+
+dev-streaming-up:
+	 docker compose up spark-master spark-worker kafka zookeeper minio
+
+dev-airflow-up:
+	 docker compose up airflow-webserver airflow-scheduler redis postgres spark-master spark-worker minio
+
+dev-kafka-up:
+	 docker compose up kafka zookeeper debezium postgres 
+
+dev-dbt-up:
+	 docker compose up dbt postgres	
+
 up:
 	docker compose up -d
 

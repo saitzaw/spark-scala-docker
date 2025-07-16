@@ -57,6 +57,10 @@ Note: All the spark server and worker use spark-3.5.5 version
 | 9 | make web | enter airflow webserver | 
 |10 | make scheduler | enter aiflow scheduler | 
 |11 | make redis | enter redis queue | 
+|12 | make dev-spark-up | spark, postgre and minio |
+|13 | make dev-streaming-up | kakfa, debezuim and postgres |
+|14 | make dev-airflow-up | batch mode | 
+|15 | make dev-dbt-up | dbt, postgres -> data analysis and transformation |
 
 # Environment file 
 Remove sample from the file and edit the reqiured file such as 
@@ -67,6 +71,7 @@ user name, password etc
 | 1 | sample.env | .env |  environment file for jupyter notebook and postgresql | 
 | 2 | sample.env.spark | .env.spark | spark environment file | 
 | 3 | sample.env.airflow | .env.airflow |airflow environment file |  
+| 4 | sample.env.minio | .env.minio | minio enviroment file |
 
 REMARK: edit and make sure the parameters before image  build and docker compose up 
 
@@ -91,6 +96,7 @@ REMARK: edit and make sure the parameters before image  build and docker compose
 | 16 | sap-data | sample sap data from Kaggel | 
 | 17 | spark-apps| scala and python development folder | 
 | 18 | spark-logs| external log folder for spark| 
+| 19 | lakehouse | data lakehouse using Minio and Delta table | 
 
 
 REMARK: Don't run make rebuild or make clean. It will take more tike to build a docker image and repulling the required images. 
@@ -180,6 +186,7 @@ This project supports to use UI
 3. Spark history 
 4. Jupyter notebook 
 5. airflow web UI 
+6. Minio UI 
 
 ## Check the spark master UI in web
 After building the docker images and up the process, check the spark UI
@@ -193,6 +200,7 @@ After building the docker images and up the process, check the spark UI
 | 5 | http://localhost:4040 | spark application | 
 | 6 | http://localhost:8888 | Jupyter UI | 
 | 7 | http://localhost:9021 | Kafka control UI | 
+| 8 | http://localhost:9000 | Minio UI | 
 
 
 REMARK: Jupyter needs to use access token each time 
@@ -465,7 +473,6 @@ we can check the spark process in UI and it is also a dag.
 - SAP in lakehouse sample and lineage 
 
 # Next plan 
-- Add MINIO for object storage 
 - Add Openlineage for data lineage 
 - Add Openmetadata for Metadaa 
 - Full ETL pipeline in Scala 
