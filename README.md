@@ -46,21 +46,38 @@ Note: All the spark server and worker use spark-3.5.5 version
 
 | # | command | description | 
 |:-:|:-------:|:------------| 
-| 1 | make build | build docker images for customized spark and jupyter | 
-| 2 | make up | up all docker images and need to wait 2 to 3 mins| 
-| 3 | make down | docker compose down | 
-| 4 | make rebuild | rebuild the docker image | 
-| 5 | make clean | clean all docker image | 
-| 6 | make dev | enter the spark master | 
-| 7 | make da | enter the jupyter image | 
-| 8 | make pg | enter the postgresql | 
-| 9 | make web | enter airflow webserver | 
-|10 | make scheduler | enter aiflow scheduler | 
-|11 | make redis | enter redis queue | 
-|12 | make dev-spark-up | spark, postgre and minio |
-|13 | make dev-streaming-up | kakfa, debezuim and postgres |
-|14 | make dev-airflow-up | batch mode | 
-|15 | make dev-dbt-up | dbt, postgres -> data analysis and transformation |
+| 1 | make build | build docker images for customized spark, airflow, elastic and jupyter | 
+| 2 | make dev-batch-up | up the spark master, jupyter and minio server |
+| 3 | make dev-streaming-up | up the kafka, debezium, spark and postgres |  
+| 4 | make dev-scheduler-up | up the airflow ,spark, postgres and minio | 
+| 5 | make dev-cdc-up | up the CDC workspace, kafka, debezium and postgres | 
+| 6 | make dev-dbt-up | up the dbt server using dbt core, postgres -> data analysis and transformation |
+| 7 | make dev-elk-up | up the elastic search | 
+| 8 | make dev-up-all-services | run all service exclude elastic stack | 
+| 9 | make dev-down-all-services | down all service | 
+| 10| make dev-clean-all-services | clean docker images | 
+| 11| make dev-rebuild-all-services | rebuild all services | 
+| 12| make dev-spark-shell | enter the spark master shell | 
+| 13| make dev-jupyter-shell enter the jupyter server | 
+| 14| make dev-postgres-shell | enter the postgres shell | 
+| 16| make dev-airflow-webserver| enter the airflow webserver shell |
+| 17| make dev-airflow-scheduler| enter the airflow scheduler shell | 
+| 18| make dev-redis | enter the redis shell | 
+| 19| make dev-dbt-shell | enter the dbt shell |
+| 20| make dev-airflow-dags-list | show the dags lists in the system | 
+| 21| make dev-kafka-logs | show the kakfa log | 
+| 22| make dev-spark-logs | show the spark master log | 
+| 23| make dev-spark-worker-logs | show the spark worker log | 
+| 24| make dev-airflow-logs | show the airflow webserver log | 
+| 25| make dev-dbt-debug | debug the dbt after init | 
+| 26| make dev-airflow-init-db | init the airflow database | 
+| 27| make dev-airflow-migrate | migrate the database from SQLite to  | 
+| 28| make dev-airflow-create-user | create the airflow user in dev | 
+
+For other environment such as QUA, UAT, PRD please change as 
+- qua-cdc-up
+- uat-cdc-up
+- prd-cdc-up 
 
 # Environment file 
 Remove sample from the file and edit the reqiured file such as 
@@ -87,21 +104,24 @@ REMARK: edit and make sure the parameters before image  build and docker compose
 | 7 | dbt | data build tool for tranformation and analytics |  
 | 8 | docker | docker files location | 
 | 9 | init-sql | sql related folders | 
-| 10 | logs* | auto generate from apache airflow| 
-| 11 | notebooks | location for data analysis and data scientist | 
-| 12 | pg_data* | auto generate and volumn mount for postgresql | 
-| 13 | plugins | Apache Airflow plugins file here | 
-| 14 | reports | report generators | 
-| 15 | result-jar| jar files collection and use in spark-submit | 
-| 16 | sap-data | sample sap data from Kaggel | 
-| 17 | spark-apps| scala and python development folder | 
-| 18 | spark-logs| external log folder for spark| 
-| 19 | lakehouse | data lakehouse using Minio and Delta table | 
+| 10 | kafka-config | kakfa configuration file |
+| 11 | kafka-data | presistance kafka data store | 
+| 12 | logs* | auto generate from apache airflow| 
+| 13 | notebooks | location for data analysis and data scientist | 
+| 14 | pg_data* | auto generate and volumn mount for postgresql | 
+| 15 | plugins | Apache Airflow plugins file here | 
+| 16 | reports | report generators | 
+| 17 | result-jar| jar files collection and use in spark-submit | 
+| 18 | sap-data | sample sap data from Kaggel | 
+| 19 | spark-apps| scala and python development folder | 
+| 20 | spark-logs| external log folder for spark| 
+| 21 | lakehouse | data lakehouse using Minio and Delta table, this is and exter folder  | 
 
 
 REMARK: Don't run make rebuild or make clean. It will take more tike to build a docker image and repulling the required images. 
 
-# Buinses Domain 
+# Buinses Domain (logistic, Finance)
+
 - SAP (SD, FICO, COPA) and 
 - Salesforce (CRM)
 - Data catalog and data lineage 
@@ -112,7 +132,6 @@ REMARK: Don't run make rebuild or make clean. It will take more tike to build a 
 Run those command in GNU Linux or WSL terminal  
 ```shell 
 make build 
-make up 
 ```
 it needs to wait couple of minutes to build and settle the images. 
 
@@ -435,6 +454,8 @@ if the above command is not reply anything check with this command
 docker exec -it debezium curl http://localhost:8083/connector-plugins
 ```
 ### DBT 
+- cannot run debug command, check the profile 
+- parse error in VScode check the DBT operator can read the profile or not [if dbt debug can run ignore it]
 
 ### Kafka cannot write log 
 ```bash 
@@ -470,7 +491,7 @@ we can check the spark process in UI and it is also a dag.
 - ON DEMANd ad-hoc report supprot 
 - Master data management 
 - SAP and Salesfoce data as simple [SD, FICO, MW and MM ]
-- SAP in lakehouse sample and lineage 
+- SAP in lakehouse sample and lineage  
 
 # Next plan 
 - Add Openlineage for data lineage 
@@ -480,5 +501,5 @@ we can check the spark process in UI and it is also a dag.
 - CI/CD 
 - Data profiler 
 - Integration with Apache Iceberg 
-- ELK stack for indexing and Enterprise search
+
 
