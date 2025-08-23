@@ -53,6 +53,7 @@ Note: All the spark server and worker use spark-3.5.5 version
 | 5 | make dev-cdc-up | up the CDC workspace, kafka, debezium and postgres | 
 | 6 | make dev-dbt-up | up the dbt server using dbt core, postgres -> data analysis and transformation |
 | 7 | make dev-elk-up | up the elastic search | 
+| 7 | make dev-elk-down | down the elastic search |
 | 8 | make dev-up-all-services | run all service exclude elastic stack | 
 | 9 | make dev-down-all-services | down all service | 
 | 10| make dev-clean-all-services | clean docker images | 
@@ -206,6 +207,7 @@ This project supports to use UI
 4. Jupyter notebook 
 5. airflow web UI 
 6. Minio UI 
+7. Elastic UI
 
 ## Check the spark master UI in web
 After building the docker images and up the process, check the spark UI
@@ -220,6 +222,7 @@ After building the docker images and up the process, check the spark UI
 | 6 | http://localhost:8888 | Jupyter UI | 
 | 7 | http://localhost:9021 | Kafka control UI | 
 | 8 | http://localhost:9000 | Minio UI | 
+| 9 | http://localhost:5601 | Elasitc UI | 
 
 
 REMARK: Jupyter needs to use access token each time 

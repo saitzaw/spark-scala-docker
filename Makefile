@@ -19,6 +19,9 @@ dev-dbt-up:
 dev-elk-up:
 	 docker compose -f docker-compose.elk.yml --env-file .env.elasticsearch up -d
 
+dev-elk-down:
+	 docker compose -f docker-compose.elk.yml --env-file .env.elasticsearch down
+
 dev-up-all-services:
 	 docker compose up airflow-webserver airflow-scheduler redis postgres spark-master spark-worker kafka zookeeper debezium minio dbt
 	docker compose up -d
