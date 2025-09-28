@@ -1,7 +1,10 @@
 #  data engineering in Scala, PySpark 
 
-  Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook.
-  All the scripts and code are easy to test and run in local before submit to cloud server.  
+  Enterprise Data engineering needs complex infrastrucre setup and install huge dependencies to run a single pipeline. However, thanks to containerization, we can build similar setup for the DEV, QUA and PRD environment. This setup is test to run the Scala, Pyspark in low cost method. This repo also accept to use the ad-hoc query to run in juypter notebook. 
+  
+  Besides of Data Engineering, this repo can give the business value to the users (dataset, busienss term, lineage etc.)
+
+  All the scripts and code are easy to test and run in local before submit to cloud server with zero cost. 
 
 # Data Pipeline Architecture
 ![System Architecture](asserts/dataArch.png)
@@ -9,28 +12,32 @@
 # SYSTEM Requirement 
 - GNU Linux or WSL 2
 - Docker must be installed 
-- docke compose must be installed 
+- docker compose must be installed 
 - RAM 16 GB at least 
 - CPU core i5 at least 
 
 # Languages 
 - Python, PySpark 
 - Scala 
-- SQL 
+- SQL (for Postgres,MySQL)
 
 # Framework 
 - Apache Spark 
 - Apache Airflow 
+- Elastic Search
 - Jupyter notebook / Lab for analysis
 
 # Database 
 - Postgresql 15
+- Mysql 
+- MongoDB
 
 # Additional requirements
 - Vscode with Metal extension 
 - DBeaver 
 - Docker for Desktop 
 - Git 
+- Postman for API test (for Elastic Search)
 
 # Version alignment 
 
@@ -40,9 +47,12 @@
 | 2 | Java | open-jdk-11 | 
 | 3 | Scala | 2.12.18 | 
 
+Remark: Don't use different version of Scala and check the stable scala version if you want to change the 3.5.x to 4.x version
+
 Note: All the spark server and worker use spark-3.5.5 version 
 
 # Using make command 
+This is only for data plotform to run and all this commands run for various environment and related services.  
 
 | # | command | description | 
 |:-:|:-------:|:------------| 
@@ -59,7 +69,7 @@ Note: All the spark server and worker use spark-3.5.5 version
 | 10| make dev-clean-all-services | clean docker images | 
 | 11| make dev-rebuild-all-services | rebuild all services | 
 | 12| make dev-spark-shell | enter the spark master shell | 
-| 13| make dev-jupyter-shell enter the jupyter server | 
+| 13| make dev-jupyter-shell | enter the jupyter server | 
 | 14| make dev-postgres-shell | enter the postgres shell | 
 | 16| make dev-airflow-webserver| enter the airflow webserver shell |
 | 17| make dev-airflow-scheduler| enter the airflow scheduler shell | 
@@ -74,6 +84,10 @@ Note: All the spark server and worker use spark-3.5.5 version
 | 26| make dev-airflow-init-db | init the airflow database | 
 | 27| make dev-airflow-migrate | migrate the database from SQLite to  | 
 | 28| make dev-airflow-create-user | create the airflow user in dev | 
+
+## Stop the required services 
+docker compose down  
+
 
 For other environment such as QUA, UAT, PRD please change as 
 - qua-cdc-up
@@ -124,11 +138,13 @@ REMARK: Don't run make rebuild or make clean. It will take more tike to build a 
 # Buinses Domain (logistic, Finance)
 
 - SAP (SD, FICO, COPA) and 
-- Salesforce (CRM)
 - Data catalog and data lineage 
 
 
 # BUILD and Setup 
+  
+  This section is only for 1st time installation and using of this repo. After that, you can use all make command. This is the building of data paltform command for data lakehouse. 
+
 ## BUILD 
 Run those command in GNU Linux or WSL terminal  
 ```shell 
@@ -503,6 +519,5 @@ we can check the spark process in UI and it is also a dag.
 - DataVault 2.0 and SCD type 2 for address and historical tracking 
 - CI/CD 
 - Data profiler 
-- Integration with Apache Iceberg 
 
 
