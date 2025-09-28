@@ -140,7 +140,7 @@
 
 
 Note: get this table from the kaggle 
-
+Link: https://www.kaggle.com/datasets/mustafakeser4/sap-dataset-bigquery-dataset
 
 
 - Salesforce term to business term 
