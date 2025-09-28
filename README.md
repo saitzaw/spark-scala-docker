@@ -198,6 +198,19 @@ make airflow-create-user
 ```
 Airflow is ready to use, but all the example dags are not shown as development environment. 
 
+
+### Airflow UI Admin and password 
+```sh 
+# Create a new admin user
+airflow users create \
+    --username airflowAdmin \
+    --firstname airflow \
+    --lastname Admin \
+    --role Admin \
+    --email admin@example.com \
+    --password airflow1234
+```
+
 ### Airflow CLI commands 
 
 | # | cli | description | 
@@ -262,6 +275,7 @@ For streaming data
 - To run connect CDC postgresql 
 
 ```JSON
+
 curl -X POST http://localhost:8083/connectors \
   -H "Content-Type: application/json" \
   -d '{
