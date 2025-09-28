@@ -467,6 +467,7 @@ Add the requried data to connection and use the default IP addess get from the i
 cd ~/BigData/enterprise-data-lakehouse/spark-apps/pyspark/src
 zip -r utilities.zip utilities
 ```
+- using direct connection to s3 instead of using a single utilities script 
 
 ### Debezium connector checking 
 ```bash
