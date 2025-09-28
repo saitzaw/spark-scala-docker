@@ -13,6 +13,8 @@ def env_parameter():
     pg_jar = os.getenv("PG_JAR")
     event_log_dir = os.getenv("EVENT_LOG_DIR")
     pg_driver = os.getenv("PG_DIRIVER")
+    minio_user = os.getenv("MINIO_USER")
+    minio_pass = os.getenv("MINIO_PASSWORD")
 
     return {
         'jdbc_url': jdbc_url,
@@ -21,5 +23,7 @@ def env_parameter():
         'spark_master': spark_master,
         'pg_jar': pg_jar,
         'event_log_dir': event_log_dir,
-        'pg_driver': pg_driver
+        'pg_driver': pg_driver,
+        'minio_user': minio_user,
+        'minio_pass': minio_pass
         }
