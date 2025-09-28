@@ -438,7 +438,8 @@ spark-submit \
 ### Pyspark submit
 To test with PySpark 
 ```shell 
-PYSPARK_DRIVER_PYTHON=python3 spark-submit \
+PYSPARK_DRIVER_PYTHON=python3
+ spark-submit \
   --master spark://spark-master:7077 \
   --conf spark.input.path=/opt/spark/data/logs.txt \
   --conf spark.log.type=INFO \
@@ -461,6 +462,11 @@ Add the requried data to connection and use the default IP addess get from the i
 - File path 
 - Postgresql user name and password 
 - postgresql jdbc connector location issue 
+- with extra python module, create a zip file first create a zip in that folder 
+```
+cd ~/BigData/enterprise-data-lakehouse/spark-apps/pyspark/src
+zip -r utilities.zip utilities
+```
 
 ### Debezium connector checking 
 ```bash
