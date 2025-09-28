@@ -53,12 +53,12 @@ dev-airflow-migrate:
 
 dev-airflow-create-user:
 	docker exec -it airflow-webserver airflow users create \
-		--username admin \
+		--username airflowAdmin \
 		--firstname Admin \
-		--lastname User \
+		--lastname Admin \
 		--role Admin \
-		--email admin@jjhome@gmail.com
-		--password admin1234
+		--email admin@example.com
+		--password airflow1234
 
 dev-airflow-webserver:
 	docker exec -it airflow-webserver bash
