@@ -16,9 +16,9 @@ spark-submit \
 ### Ingestion data to  MINIO delta lake
 ### ADR6 
 ```sh 
- spark-submit \ 
-  --master spark://spark-master:7077  \
-  --packages org.apache.hadoop:hadoop-aws:3.3.2,com.amazonaws:aws-java-sdk-bundle:1.12.262  \
+spark-submit \
+  --master spark://spark-master:7077 \
+  --packages org.apache.hadoop:hadoop-aws:3.3.2,com.amazonaws:aws-java-sdk-bundle:1.12.262 \
   --conf spark.log.type=INFO \
   --conf spark.interface.name=VTLINK \
   --conf spark.eventLog.enabled=true \
