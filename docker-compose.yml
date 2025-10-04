@@ -79,6 +79,8 @@ services:
       context: .
       dockerfile: docker/airflow.Dockerfile
     image: custom-airflow:2.9.2
+    group_add:
+    - ${DOCKER_GID}
     container_name: airflow-webserver
     depends_on:
       - postgres
@@ -90,7 +92,11 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - ./spark-apps:/opt/spark/jobs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PYSPARK_PYTHON=python3
+      - SPARK_MASTER=spark://spark-master:7077
     ports:
       - "8088:8080"
     command: webserver
@@ -98,6 +104,8 @@ services:
 
   airflow-scheduler:
     image: custom-airflow:2.9.2
+    group_add:
+    - ${DOCKER_GID}
     container_name: airflow-scheduler
     depends_on:
       - postgres
@@ -109,12 +117,18 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - ./spark-apps:/opt/spark/jobs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PYSPARK_PYTHON=python3
+      - SPARK_MASTER=spark://spark-master:7077
     command: scheduler
     restart: always
 
   airflow-worker:
     image: custom-airflow:2.9.2
+    group_add:
+    - ${DOCKER_GID}
     container_name: airflow-worker
     depends_on:
       - postgres
@@ -126,7 +140,11 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock 
+      - ./spark-apps:/opt/spark/jobs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PYSPARK_PYTHON=python3
+      - SPARK_MASTER=spark://spark-master:7077
     command: celery worker
     restart: always
 
