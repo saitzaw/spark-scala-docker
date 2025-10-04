@@ -1,7 +1,7 @@
 build:
 	docker compose build
 
-dev-batch-up:
+dev-jupyter-up:
 	 docker compose up spark-master spark-worker jupyter minio
 
 dev-streaming-up:
