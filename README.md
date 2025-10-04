@@ -198,6 +198,16 @@ make airflow-create-user
 ```
 Airflow is ready to use, but all the example dags are not shown as development environment. 
 
+### Airflow build for new operator 
+```shell 
+docker build -t custom-airflow:2.9.2 -f docker/airflow.Dockerfile .
+```
+
+### check for the docker run 
+```sh
+docker run -it --rm custom-airflow:2.9.2 airflow version
+```
+
 
 ### Airflow UI Admin and password 
 ```sh 
@@ -462,6 +472,20 @@ PYSPARK_DRIVER_PYTHON=python3
 ```
 
 # Troubleshooting 
+
+### Docker network 
+
+##### list all docker network 
+```sh 
+docker network ls 
+```
+
+##### check the docker image own network 
+
+ - check for the airflow webserver
+```sh 
+docker inspect airflow-webserver --format '{{json .NetworkSettings.Networks}}'
+```
 ### Check the defautl route to interactive with DBeaver 
 ```shell 
 ip route | grep default 
