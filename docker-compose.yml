@@ -87,11 +87,10 @@ services:
       - .env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
-      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - ./spark-apps:/opt/spark/jobs 
+      - /var/run/docker.sock:/var/run/docker.sock 
     ports:
       - "8088:8080"
     command: webserver
@@ -107,11 +106,10 @@ services:
       - .env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
-      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
-      - ./spark-apps:/opt/spark/jobs 
       - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock 
     command: scheduler
     restart: always
 
@@ -125,11 +123,10 @@ services:
       - .env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
-      - ./spark-logs:/opt/spark/spark-events
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
-      - ./spark-apps:/opt/spark/jobs 
       - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock 
     command: celery worker
     restart: always
 
