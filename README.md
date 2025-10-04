@@ -57,7 +57,7 @@ This is only for data plotform to run and all this commands run for various envi
 | # | command | description | 
 |:-:|:-------:|:------------| 
 | 1 | make build | build docker images for customized spark, airflow, elastic and jupyter | 
-| 2 | make dev-batch-up | up the spark master, jupyter and minio server |
+| 2 | make dev-jupyter-up | up the spark master, jupyter and minio server |
 | 3 | make dev-streaming-up | up the kafka, debezium, spark and postgres |  
 | 4 | make dev-scheduler-up | up the airflow ,spark, postgres and minio | 
 | 5 | make dev-cdc-up | up the CDC workspace, kafka, debezium and postgres | 
@@ -486,6 +486,25 @@ docker network ls
 ```sh 
 docker inspect airflow-webserver --format '{{json .NetworkSettings.Networks}}'
 ```
+
+
+### mount permission 
+#### command to check the docker sock
+```sh 
+docker compose exec -T airflow-scheduler ls -l /var/run/docker.sock
+```
+#### check the docker group 
+
+```sh 
+getent group docker | cut -d: -f3
+```
+Note: put the docker group id to env file -> .env.airflow 
+
+### GID to .env
+```
+echo "DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)" > .env.docker-gid
+```
+
 ### Check the defautl route to interactive with DBeaver 
 ```shell 
 ip route | grep default 
