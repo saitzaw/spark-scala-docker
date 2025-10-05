@@ -23,7 +23,7 @@ with DAG(
     schedule_interval=None,
     catchup=False,
     default_args=default_args,
-    tags=["spark", "bronze", "sap"]
+    tags=["address", "bronze", "sap"]
 ) as dag:
 
     adr6_task = BashOperator(
