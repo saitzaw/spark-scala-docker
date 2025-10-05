@@ -61,9 +61,9 @@ with DAG(
     tags=["spark", "bronze", "sap"],
 ) as dag:
 
-    adr6  = spark_task("adr6_to_bronze", "","","adr6")
-    adrc  = spark_task("adrc_to_bronze",  "adrc")
-    adrct = spark_task("adrct_to_bronze", "adrct")
+    adr6  = spark_task("adr6_to_bronze", "bronze_sap","address","adr6")
+    adrc  = spark_task("adrc_to_bronze", "bronze_sap","address","adrc")
+    adrct = spark_task("adrct_to_bronze", "bronze_sap","address","adrct")
 
 
     adr6 >> adrc >> adrct 
