@@ -1,16 +1,17 @@
-# vbrk.py : version 1.00 Date 2025-10-04
+# vbrk.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #    Billing Header (Billing Document: SD Document Header)
 ###################################################################################
 #    ETL process for SAP vbrk data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -66,20 +67,36 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "fkdat",
-            when((col("fkdat").isNull()) | trim(col("fkdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("fkdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("fkdat").isNull()) | (length(trim(col("fkdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("fkdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         ).withColumn(
         "erdat",
-            when((col("erdat").isNull()) | trim(col("erdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("erdat").isNull()) | (length(trim(col("erdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
         "fkdat_rl",
-            when((col("fkdat_rl").isNull()) | trim(col("fkdat_rl)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("fkdat_rl"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("fkdat_rl").isNull()) | (length(trim(col("fkdat_rl")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("fkdat_rl"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
         "kurrf_dat", 
-            when((col("kurrf_dat").isNull()) | trim(col("kurrf_dat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("kurrf_dat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("kurrf_dat").isNull()) | (length(trim(col("kurrf_dat")))==0), 
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("kurrf_dat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
          )
     return df
 

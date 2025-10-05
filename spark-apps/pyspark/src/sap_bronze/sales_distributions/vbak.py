@@ -1,16 +1,17 @@
-# vbak.py : version 1.00 Date 2025-10-04
+# vbak.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #    Sales order header (Sales Order Document: SD Document Header)
 ###################################################################################
 #    ETL process for SAP vbak data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks  
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -62,36 +63,60 @@ def build_spark(cfg: dict) -> SparkSession:
 # BSTDK - Purchase Order Date
 # AEDAT - Date of Last Change
 # ERZET - Time of Entry (creation)
-# FMDAT - Material Availability Date (Actual Goods Issue Date / Delivery Completion Date)
+# FMBDAT - Material Availability Date (Actual Goods Issue Date / Delivery Completion Date)
 #######################################################################
 # --- Pure transform ---
 def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "erdat",
-            when((col("erdat").isNull()) | trim(col("erdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("erdat").isNull()) | (length(trim(col("erdat"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
         "audat",
-            when((col("audat").isNull()) | trim(col("audat)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("audat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("audat").isNull()) | (length(trim(col("audat"))) == 0), 
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("audat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(    
         "vdatu",
-        when((col("vdatu").isNull()) | trim(col("vdatu)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("vdatu"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("vdatu").isNull()) | (length(trim(col("vdatu"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("vdatu"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
            "bstdk",
-        when((col("bstdk").isNull()) | trim(col("bstdk)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("bstdk"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("bstdk").isNull()) | (length(trim(col("bstdk"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("bstdk"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
            "aedat",
-        when((col("aedat").isNull()) | trim(col("aedat)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("aedat").isNull()) | (length(trim(col("aedat"))) == 0), 
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
            "fmbdat",
-        when((col("fmbdat").isNull()) | trim(col("fmbdat)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("fmbdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
-        )
+                when(
+                        (col("fmbdat").isNull()) | (length(trim(col("fmbdat"))) == 0),
+                        lit('9999-12-31')
+                    ).otherwise(
+                        date_format(to_date(col("fmbdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                    )
+                )
     return df
 
 #######################################################################

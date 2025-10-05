@@ -1,16 +1,17 @@
-# lips.py : version 1.00 Date 2025-10-04
+# lips.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #    Delivery Item (Deliver Document: SD Document item) 
 ###################################################################################
 #    ETL process for SAP lipk data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -64,12 +65,20 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "erdat",
-            when((col("erdat").isNull()) | trim(col("erdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("erdat").isNull()) | (length(trim(col("erdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
         "mbdat",
-            when((col("mbdat").isNull()) | trim(col("mbdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("mbdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("mbdat").isNull()) | (length(trim(col("mbdat")))==0), 
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("mbdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         )
     return df
 

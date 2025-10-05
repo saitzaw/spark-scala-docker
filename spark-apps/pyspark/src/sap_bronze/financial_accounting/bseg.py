@@ -1,16 +1,17 @@
-# bseg.py : version 1.00 Date 2025-10-04
+# bseg.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #   Accounting Document Segment item (FI Docuemnt: item)
 ###################################################################################
 #    ETL process for SAP bseg data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -64,19 +65,30 @@ def build_spark(cfg: dict) -> SparkSession:
 def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
-        "augdat",
-        when((col("augdat").isNull()) | trim(col("augdat)" == "")), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("augdat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+        "augdt",
+        when(
+                (col("augdt").isNull()) | (length(trim(col("augdt")))==0),
+                lit('9999-12-31')
+            ).otherwise(
+                date_format(to_date(col("augdt"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            )
        ).withColumn(
            "augcp", 
-              when((col("augcp").isNull()) | trim(col("augcp)" == "")), lit('9999-12-31')).otherwise(
-                 date_format(to_date(col("augcp"),"dd/MM/yyyy"), "yyyy-MM-dd")
+              when(
+                    (col("augcp").isNull()) | (length(trim(col("augcp")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("augcp"),"dd/MM/yyyy"), "yyyy-MM-dd")
               ) 
        ).withColumn(
         "valut",
-        when((col("valut").isNull()) | trim(col("valut)" == "")), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("valut"),"dd/MM/yyyy"), "yyyy-MM-dd"))
-                )
+        when(
+                (col("valut").isNull()) | (length(trim(col("valut")))==0),
+                lit('9999-12-31')
+            ).otherwise(
+                date_format(to_date(col("valut"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            )
+        )
     return df
 
 #######################################################################

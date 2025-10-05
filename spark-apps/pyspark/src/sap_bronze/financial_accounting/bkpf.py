@@ -1,16 +1,17 @@
-# bkpf.py : version 1.00 Date 2025-10-04
+# bkpf.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #   Accounting Document Segment Header (FI Docuemnt: Header)
 ###################################################################################
 #    ETL process for SAP bkpf data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -60,7 +61,7 @@ def build_spark(cfg: dict) -> SparkSession:
 # BUDAT - Posting Date in the Document
 # CPUDT - Entry Date
 # AEDAT - Last Changed On
-# UPPDT - Update Date 
+# UPDDT - Update Date 
 # WWERT - Translation Date 
 #######################################################################
 # --- Pure transform ---
@@ -68,28 +69,52 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn( 
         "bldat",
-        when(col("bldat").isNull() | (col("bldat") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("prstd"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    col("bldat").isNull() | (length(trim(col("bldat")))==0),
+                    lit("9999-12-31" )
+                ).otherwise(
+                    date_format(to_date(col("bldat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            )
         ).withColumn(
             "budat",
-            when(col("budat").isNull() | (col("budat") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("budat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+                when(
+                        col("budat").isNull() | (length(trim(col("budat")))==0), 
+                        lit("9999-12-31" )
+                    ).otherwise(
+                        date_format(to_date(col("budat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         ).withColumn(
             "cpudt",
-            when(col("cpudt").isNull() | (col("cpudt") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("cpudt"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+                when(
+                        col("cpudt").isNull() | (length(trim(col("cpudt")))==0),
+                        lit("9999-12-31" )
+                    ).otherwise(
+                        date_format(to_date(col("cpudt"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         ).withColumn(
             "aedat",
-            when(col("aedat").isNull() | (col("aedat") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+                when(
+                        col("aedat").isNull() | (length(trim(col("aedat")))==0),
+                        lit("9999-12-31" )
+                    ).otherwise(
+                        date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         ).withColumn(
-            "uppdt",
-            when(col("uppdt").isNull() | (col("uppdt") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("uppdt"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            "upddt",
+                when(
+                        col("upddt").isNull() | (length(trim(col("upddt")))==0),
+                        lit("9999-12-31" )
+                    ).otherwise(
+                        date_format(to_date(col("upddt"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         ).withColumn(
             "wwert",
-            when(col("wwert").isNull() | (col("wwert") == ""), lit("1900-01-01" )).otherwise(
-           date_format(to_date(col("wwert"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+                when(
+                        col("wwert").isNull() | (length(trim(col("wwert")))==0),
+                        lit("9999-12-31" )
+                    ).otherwise(
+                        date_format(to_date(col("wwert"),"dd/MM/yyyy"), "yyyy-MM-dd")
+           )
         )
     return df
 

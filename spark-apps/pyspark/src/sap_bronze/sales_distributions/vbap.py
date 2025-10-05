@@ -1,16 +1,17 @@
-# vbap.py : version 1.00 Date 2025-10-04
+# vbap.py : version 1.01 Date 2025-10-05
 ###################################################################################
 #    Sales order lines (Sales Order Document: SD Document Item)
 ###################################################################################
 #    ETL process for SAP vbap data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length 
 
 
 # --- Config loading ---
@@ -66,16 +67,28 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "erdat",
-            when((col("erdat").isNull()) | trim(col("erdat)" == ""))), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("erdat").isNull()) | (length(trim(col("erdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
            "aedat",
-        when((col("aedat").isNull()) | trim(col("aedat)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("aedat").isNull()) | (length(trim(col("aedat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("aedat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
        ).withColumn(
            "session_creation_date",
-        when((col("session_creation_date").isNull()) | trim(col("session_creation_date)" == ""))), lit('9999-12-31')).otherwise(
-        date_format(to_date(col("session_creation_date"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("session_creation_date").isNull()) | (length(trim(col("session_creation_date")))==0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("session_creation_date"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
         )
     return df
 

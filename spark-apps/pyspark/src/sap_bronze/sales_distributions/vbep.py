@@ -1,16 +1,17 @@
-# vbep.py : version 1.00 Date 2025-10-04
+# vbep.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #    Sales Document: Schedule Line Data
 ###################################################################################
 #    ETL process for SAP vbep data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -68,32 +69,50 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "edatu",
-            when((col("edatu").isNull()) | trim(col("edatu)" == "")), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("edatu"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("edatu").isNull()) | (length(trim(col("edatu"))) == 0),
+                    lit('9999-12-31')
+            ).otherwise(
+                    date_format(to_date(col("edatu"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        ).withColumn(
         "tddat",
-            when((col("tddat").isNull()) | trim(col("tddat)" == "")), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("tddat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("tddat").isNull()) | (length(trim(col("tddat"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("tddat"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        ).withColumn(
         "mbdat",
-            when((col("mbdat").isNull()) | trim(col("mbdat)" == "")), lit('9999-12-31')).otherwise(
+            when(
+                    (col("mbdat").isNull()) | (length(trim(col("mbdat"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
                 date_format(to_date(col("mbdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        ).withColumn(
         "lddat",
-            when((col("lddat").isNull()) | trim(col("lddat)" == "")), lit('9999-12-31')).otherwise(
-                date_format(to_date(col("lddat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+            when(
+                    (col("lddat").isNull()) | (length(trim(col("lddat"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
+                    date_format(to_date(col("lddat"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        ).withColumn(
         "wadat",
-            when((col("wadat").isNull()) | trim(col("wadat)" == "")), lit('9999-12-31')).otherwise(
+            when(
+                    (col("wadat").isNull()) | (length(trim(col("wadat"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
                 date_format(to_date(col("wadat"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        ).withColumn(
         "handoverdate",
-            when((col("handoverdate").isNull()) | trim(col("handoverdate)" == "")), lit('9999-12-31')).otherwise(
+            when(
+                    (col("handoverdate").isNull()) | (length(trim(col("handoverdate"))) == 0),
+                    lit('9999-12-31')
+                ).otherwise(
                 date_format(to_date(col("handoverdate"),"dd/MM/yyyy"), "yyyy-MM-dd")
         )
        )

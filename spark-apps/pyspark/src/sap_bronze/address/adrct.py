@@ -1,17 +1,18 @@
-# adrct.py : version 1.01 Date: 2025-10-04
+# adrct.py : version 1.02 Date: 2025-10-05
 #########################################################################################################
 #    Address Texts (Description)
 #########################################################################################################
 #    ETL process for SAP ADR6 data from landing to bronze zone in parquet format.
-#    version: 1.00 Author: Saithiha Zaw Date: 2025-09-28 Create
-#    version: 1.01 Author: Saithiha Zaw Date: 2025-10-04 Modify to improve readiability and testability
+#    version: 1.00 Author: Sai Thiha Zaw Date: 2025-09-28 Create
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-04 Modify to improve readiability and testability
+#    version: 1.02 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark import DataFrame
 #########################################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit
 
 
 # --- Config loading ---
@@ -61,7 +62,13 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
     "date_from",
-        when(col("date_from") == "0001-01-01", lit("1900-01-01")).otherwise(col("date_from")))
+        when(
+                col("date_from") == "0001-01-01",
+                lit("1900-01-01")
+            ).otherwise(
+                col("date_from")
+            )
+        )
     return df
 
 # --- IO wrappers (thin) ---

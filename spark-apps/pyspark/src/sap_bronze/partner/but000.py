@@ -1,16 +1,17 @@
-# but000.py : version 1.00 Date 2025-10-04
+# but000.py : version 1.01 Date 2025-10-05
 ##################################################################################
 #    central Business Partner master data (CRM)
 ###################################################################################
 #    ETL process for SAP but000 data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, when, lit, DataFrame, to_date, date_format, trim 
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
 
 
 # --- Config loading ---
@@ -41,7 +42,7 @@ def load_config(env_path: Path | None = None) -> dict:
 def build_spark(cfg: dict) -> SparkSession:
     return (
         SparkSession.builder
-        .appName("KNA1_BRONZE")
+        .appName("BUT000_BRONZE")
         .master(cfg["SPARK_MASTER"])
         .config("spark.hadoop.fs.s3a.endpoint", cfg["S3_ENDPOINT"])
         .config("spark.hadoop.fs.s3a.access.key", cfg["MINIO_USER"])
@@ -68,28 +69,52 @@ def transform(df: DataFrame) -> DataFrame:
     # normalize date_from
     df = df.withColumn(
         "found_dat",
-            when((col("found_dat").isNull()) | trim(col("found_dat)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("found_dat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
-    ).wthColumn(
+            when(
+                    (col("found_dat").isNull()) | (length(trim(col("found_dat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("found_dat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
+    ).withColumn(
         "liquid_dat",
-            when((col("liquid_dat").isNull()) | trim(col("liquid_dat)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("liquid_dat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    (col("liquid_dat").isNull()) | (length(trim(col("liquid_dat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("liquid_dat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
     ).withColumn(
         "birthdt",
-            when((col("birthdt").isNull()) | trim(col("birthdt)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("birthdt"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    (col("birthdt").isNull()) | (length(trim(col("birthdt")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("birthdt"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
     ).withColumn(
         "deathdt",
-            when((col("deathdt").isNull()) | trim(col("deathdt)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("deathdt"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    (col("deathdt").isNull()) | (length(trim(col("deathdt")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("deathdt"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
     ).withColumn(
         "crdat",
-            when((col("crdat").isNull()) | trim(col("crdat)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("crdat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    (col("crdat").isNull()) | (length(trim(col("crdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("crdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
     ).withColumn(
         "chdat",
-            when((col("chdat").isNull()) | trim(col("chdat)" == "")) , lit('9999-12-31')).otherwise(    
-                date_format(to_date(col("chdat"),"dd/MM/yyyy"), "yyyy-MM-dd"))
+            when(
+                    (col("chdat").isNull()) | (length(trim(col("chdat")))==0),
+                    lit('9999-12-31')
+                ).otherwise(    
+                    date_format(to_date(col("chdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
+                )
     )
     return df
 
