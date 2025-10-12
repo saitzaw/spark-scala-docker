@@ -1,17 +1,18 @@
-# vbuk.py : version 1.00 Date 2025-10-04
+# vbuk.py : version 1.01 Date 2025-10-12
 ##################################################################################
 #    Header Status (SD Document Header)
 #    Shows overall status (delivery, billing, credit)
 ###################################################################################
 #    ETL process for SAP vbuk data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
+#    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-12 Add ingestion date and system  
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import DataFrame
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import current_timestamp, lit
 
 
 # --- Config loading ---
@@ -19,7 +20,7 @@ def load_config(env_path: Path | None = None) -> dict:
     if env_path:
         load_dotenv(env_path)
     else:
-        default_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        default_env = Path(__file__).resolve().parents[2] / ".env"
         load_dotenv(default_env)
     cfg = {
         "JDBC_URL": os.getenv("JDBC_URL"),
@@ -60,7 +61,12 @@ def build_spark(cfg: dict) -> SparkSession:
 #
 #######################################################################
 # --- Pure transform ---
-# No transform needed as there is no date field in vbuk
+def transform(df: DataFrame) -> DataFrame:
+    # NOTE: add ingestion time 
+    df=  df.withColumn("_ingest_ts", current_timestamp()) \
+            .withColumn("_change_ts", current_timestamp()) \
+            .withColumn("_source_system", lit("SAP"))
+    return df
 
 
 
@@ -88,7 +94,8 @@ def write_bronze(df: DataFrame, uri: str) -> None:
 def main():
     cfg = load_config()
     spark = build_spark(cfg)
-    out = read_landing(spark, cfg["LANDING_URI"])
+    df = read_landing(spark, cfg["LANDING_URI"])
+    out = transform(df)
     write_bronze(out, cfg["BRONZE_URI"])
 
 if __name__ == "__main__":

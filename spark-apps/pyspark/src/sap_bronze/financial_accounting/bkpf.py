@@ -1,17 +1,19 @@
-# bkpf.py : version 1.01 Date 2025-10-05
+# bkpf.py : version 1.02 Date 2025-10-12
 ##################################################################################
 #   Accounting Document Segment Header (FI Docuemnt: Header)
 ###################################################################################
 #    ETL process for SAP bkpf data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
 #    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark tricks 
+#    version: 1.02 Author: Sai Thiha Zaw Date: 2025-10-12 Add ingestion date and system  
 ###################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
+from pyspark.sql.functions import (col, when, lit, to_date, 
+                                   date_format, trim, length, current_timestamp)
 
 
 # --- Config loading ---
@@ -19,7 +21,7 @@ def load_config(env_path: Path | None = None) -> dict:
     if env_path:
         load_dotenv(env_path)
     else:
-        default_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        default_env = Path(__file__).resolve().parents[2] / ".env"
         load_dotenv(default_env)
     cfg = {
         "JDBC_URL": os.getenv("JDBC_URL"),
@@ -116,6 +118,11 @@ def transform(df: DataFrame) -> DataFrame:
                         date_format(to_date(col("wwert"),"dd/MM/yyyy"), "yyyy-MM-dd")
            )
         )
+    
+    # NOTE: add ingestion time 
+    df=  df.withColumn("_ingest_ts", current_timestamp()) \
+            .withColumn("_change_ts", current_timestamp()) \
+            .withColumn("_source_system", lit("SAP"))
     return df
 
 #######################################################################

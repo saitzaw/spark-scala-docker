@@ -1,4 +1,4 @@
-# adrct.py : version 1.02 Date: 2025-10-05
+# adrct.py : version 1.03 Date: 2025-10-12
 #########################################################################################################
 #    Address Texts (Description)
 #########################################################################################################
@@ -6,13 +6,14 @@
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-09-28 Create
 #    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-04 Modify to improve readiability and testability
 #    version: 1.02 Author: Sai Thiha Zaw Date: 2025-10-05 Fix pyspark import DataFrame
+#    version: 1.03 Author: Sai Thiha Zaw Date: 2025-10-12 Add ingestion date and system
 #########################################################################################################
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col, when, lit
+from pyspark.sql.functions import col, when, lit, current_timestamp
 
 
 # --- Config loading ---
@@ -20,7 +21,8 @@ def load_config(env_path: Path | None = None) -> dict:
     if env_path:
         load_dotenv(env_path)
     else:
-        default_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        default_env = Path(__file__).resolve().parents[2] / ".env"
+        print(default_env)
         load_dotenv(default_env)
     cfg = {
         "JDBC_URL": os.getenv("JDBC_URL"),
@@ -37,7 +39,6 @@ def load_config(env_path: Path | None = None) -> dict:
         "S3_ENDPOINT": os.getenv("S3_ENDPOINT", "http://minio:9000"),
     }
     return cfg
-
 
 # --- Spark session ---
 def build_spark(cfg: dict) -> SparkSession:
@@ -69,6 +70,11 @@ def transform(df: DataFrame) -> DataFrame:
                 col("date_from")
             )
         )
+    
+    # NOTE: add ingestion time 
+    df=  df.withColumn("_ingest_ts", current_timestamp()) \
+            .withColumn("_change_ts", current_timestamp()) \
+            .withColumn("_source_system", lit("SAP"))
     return df
 
 # --- IO wrappers (thin) ---

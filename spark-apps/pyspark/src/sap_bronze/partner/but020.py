@@ -1,10 +1,11 @@
-# but020.py : version 1.01 Date 2025-10-05
+# but020.py : version 1.02 Date 2025-10-12
 ##################################################################################
 #    Business Partner Address Link Table
 ###################################################################################
 #    ETL process for SAP but020 data from landing to bronze zone in parquet format.
 #    version: 1.00 Author: Sai Thiha Zaw Date: 2025-10-04 Create 
 #    version: 1.01 Author: Sai Thiha Zaw Date: 2025-10-05 Fix format issue
+#    version: 1.02 Author: Sai Thiha Zaw Date: 2025-10-12 Add ingestion date and system 
 ###################################################################################
 
 import os
@@ -19,7 +20,7 @@ def load_config(env_path: Path | None = None) -> dict:
     if env_path:
         load_dotenv(env_path)
     else:
-        default_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        default_env = Path(__file__).resolve().parents[2] / ".env"
         load_dotenv(default_env)
     cfg = {
         "JDBC_URL": os.getenv("JDBC_URL"),

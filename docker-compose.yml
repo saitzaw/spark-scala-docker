@@ -12,12 +12,13 @@ services:
       timeout: 3s
       retries: 3
     volumes:
+      - ./env/.env:/opt/spark/jobs/pyspark/src/.env
       - ./confs:/opt/spark/conf
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
       - ./spark-logs:/opt/spark/spark-events
     env_file:
-      - .env.spark
+      - env/.env.spark
     ports:
       - '8080:8080'
       - '7077:7077'
@@ -29,8 +30,9 @@ services:
     depends_on:
       - spark-master
     env_file:
-      - .env.spark
+      - env/.env.spark
     volumes:
+      - ./env/.env:/opt/spark/jobs/pyspark/src/.env
       - ./confs:/opt/spark/conf
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
@@ -45,8 +47,9 @@ services:
     depends_on:
       - spark-master
     env_file:
-      - .env.spark
+      - env/.env.spark
     volumes:
+      - ./env/.env:/opt/spark/jobs/pyspark/src/.env
       - ./confs:/opt/spark/conf
       - ./spark-apps:/opt/spark/jobs
       - ./data:/opt/spark/data
@@ -66,7 +69,7 @@ services:
       - postgres
     volumes:
       - ./notebooks:/opt/workspace
-      - ./.env:/opt/workspace/.env
+      - ./env/.env:/opt/workspace/.env
       - ./spark-logs:/opt/spark-events
     environment:
       - PYSPARK_PYTHON=python3
@@ -86,7 +89,7 @@ services:
       - postgres
       - redis
     env_file:
-      - .env.airflow
+      - env/.env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
       - ./dags:/opt/airflow/dags
@@ -111,7 +114,7 @@ services:
       - postgres
       - redis
     env_file:
-      - .env.airflow
+      - env/.env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
       - ./dags:/opt/airflow/dags
@@ -134,7 +137,7 @@ services:
       - postgres
       - redis
     env_file:
-      - .env.airflow
+      - env/.env.airflow
     volumes:
       - ./airflow.cfg:/opt/airflow/airflow.cfg
       - ./dags:/opt/airflow/dags
@@ -262,7 +265,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env
+      - env/.env
     volumes:
       - ./pg_data:/var/lib/postgresql/data
       - ./init-sql:/sql_scripts
@@ -275,7 +278,7 @@ services:
       - "9000:9000"  # S3 API
       - "9001:9001"  # MinIO Console UI
     env_file:
-      - .env.minio
+      - env/.env.minio
     volumes:
       - ./lakehouse:/data
 

@@ -11,7 +11,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col, when, lit, to_date, date_format, trim, length
+from pyspark.sql.functions import (col, when, lit, to_date, 
+                                   date_format, trim, length, current_timestamp)
 
 
 # --- Config loading ---
@@ -19,7 +20,7 @@ def load_config(env_path: Path | None = None) -> dict:
     if env_path:
         load_dotenv(env_path)
     else:
-        default_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        default_env = Path(__file__).resolve().parents[2] / ".env"
         load_dotenv(default_env)
     cfg = {
         "JDBC_URL": os.getenv("JDBC_URL"),
@@ -71,6 +72,11 @@ def transform(df: DataFrame) -> DataFrame:
                 date_format(to_date(col("erdat"),"dd/MM/yyyy"), "yyyy-MM-dd")
             )
        )
+    
+    # NOTE: add ingestion time 
+    df=  df.withColumn("_ingest_ts", current_timestamp()) \
+            .withColumn("_change_ts", current_timestamp()) \
+            .withColumn("_source_system", lit("SAP"))
     return df
 
 #######################################################################
