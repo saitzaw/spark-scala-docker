@@ -208,6 +208,11 @@ docker build -t custom-airflow:2.9.2 -f docker/airflow.Dockerfile .
 docker run -it --rm custom-airflow:2.9.2 airflow version
 ```
 
+### Airflow is using DockerOperator 
+```
+DOCKER_GID=$(getent group docker | cut -d: -f3) 
+```
+
 
 ### Airflow UI Admin and password 
 ```sh 
@@ -284,8 +289,7 @@ For streaming data
 ## Debezium connection 
 - To run connect CDC postgresql 
 
-```JSON
-
+```shell 
 curl -X POST http://localhost:8083/connectors \
   -H "Content-Type: application/json" \
   -d '{
