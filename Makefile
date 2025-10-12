@@ -1,3 +1,6 @@
+DOCKER_GID := $(shell getent group docker | cut -d: -f3)
+export DOCKER_GID
+
 build:
 	docker compose build
 
